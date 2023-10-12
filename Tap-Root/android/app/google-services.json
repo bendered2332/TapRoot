@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "538512477950",
+    "project_id": "taproot-70636",
+    "storage_bucket": "taproot-70636.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:538512477950:android:e8eebf2a2cb3b13bc35faf",
+        "android_client_info": {
+          "package_name": "com.taproot.taproot"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVebWnq4Ks_GfAYO2FfbbInFTdeh2UOEU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
