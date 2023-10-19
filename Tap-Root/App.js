@@ -1,32 +1,33 @@
-// import { StatusBar } from 'expo-status-bar';
-// import { StyleSheet, Text, View } from 'react-native';
-
-// export default function App() {
-//   return (
-//     <View style={styles.container}>
-//       <Text>Open up App.js to start working on your app</Text>
-//       <StatusBar style="auto" />
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-// });
 
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import AppNavigator from './src/Navigation/AppNavigator';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+// import screens
+import DashboardScreen from './src/Components/PlantInfo';
+import ProfileScreen from './src/Components/PlantInfo';
+import PlantInfoScreen from './src/Components/PlantInfo';
+import HistoryScreen from './src/Components/History';
+import EditThresholdScreen from './src/Components/EditThreshold';
 
 export default function App() {
   return (
     <NavigationContainer>
-    <AppNavigator />
+    <MyTabs/>
     </NavigationContainer>
   );
 }
+const Tab = createBottomTabNavigator();
+function MyTabs() {
+  return (
+    <Tab.Navigator>
+    <Tab.Screen name="Dashboard" component={DashboardScreen}/>
+    <Tab.Screen name="Plant Info" component={PlantInfoScreen}/>
+    <Tab.Screen name="Treshold" component={EditThresholdScreen}/>
+    <Tab.Screen name="History" component={HistoryScreen}/>
+    <Tab.Screen name="Profile" component={ProfileScreen} />
+
+  </Tab.Navigator>
+  );
+}
+
