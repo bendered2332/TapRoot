@@ -4,8 +4,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 // import screens
-import DashboardScreen from './src/Components/PlantInfo';
-import ProfileScreen from './src/Components/PlantInfo';
+import DashboardScreen from './src/Components/Dashboard';
+import ProfileScreen from './src/Components/Profile';
 import PlantInfoScreen from './src/Components/PlantInfo';
 import HistoryScreen from './src/Components/History';
 import EditThresholdScreen from './src/Components/EditThreshold';
