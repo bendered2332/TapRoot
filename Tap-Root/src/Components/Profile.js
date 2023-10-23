@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, Text, Button } from 'react-native';
 
-const Login = () => {
+const Profile = () => {
   return (
     <View>
-      <Text>This is Screen 2</Text>
+      <Text>This is the Profile screen</Text>
     </View>
   );
 };
 
-export default Login;
+export default Profile;
