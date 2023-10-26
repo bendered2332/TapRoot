@@ -15,28 +15,16 @@
       "**/*"
     ],
     "ios": {
-      "googleServicesFile": "./config/GoogleService-Info.plist",
-      "supportsTablet": true,
-      "bundleIdentifier": "com.TapRoot.TapRoot"
+      "supportsTablet": true
     },
     "android": {
-      "googleServicesFile": "./config/google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      },
-      "package": "com.TapRoot.TapRoot"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "plugins": [
-      "@react-native-firebase/app"
-    ],
-    "extra": {
-      "eas": {
-        "projectId": "bda23673-e7e8-4bf4-8ae0-c48d934ca10c"
-      }
     }
   }
 }
