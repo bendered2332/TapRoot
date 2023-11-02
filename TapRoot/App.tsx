@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { PaperProvider } from 'react-native-paper';
 
 // import screens
 import DashboardScreen from './src/Components/Dashboard';
@@ -11,22 +12,24 @@ import EditThresholdScreen from './src/Components/EditThreshold';
 
 export default function App() {
   return (
-    <NavigationContainer>
-    <MyTabs/>
-    </NavigationContainer>
+    <PaperProvider>
+      <NavigationContainer>
+        <MyTabs/>
+      </NavigationContainer>
+    </PaperProvider>
+      
   );
 }
 
 const Tab = createBottomTabNavigator();
 function MyTabs() {
   return (
-    <Tab.Navigator>
+  <Tab.Navigator>
     <Tab.Screen name="Dashboard" component={DashboardScreen}/>
     <Tab.Screen name="Plant Info" component={PlantInfoScreen}/>
     <Tab.Screen name="Treshold" component={EditThresholdScreen}/>
     <Tab.Screen name="History" component={HistoryScreen}/>
     <Tab.Screen name="Profile" component={ProfileScreen} />
-
   </Tab.Navigator>
   );
 }
