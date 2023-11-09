@@ -27,21 +27,36 @@ const Tab = createBottomTabNavigator();
 function MyTabs() {
   return (
     <Tab.Navigator> 
-    <Tab.Screen name="Dashboard"options={{
+    <Tab.Screen name="Dashboard" options={{
           tabBarLabel: 'Dashboard',
           tabBarIcon: ({ color, size }) => {
-            return <Icon name="view-dashboard" size={size} color={color} />;
+            return <Icon name="home" size={size} color={color} />;
           },
         }} component={DashboardScreen}/>
-    <Tab.Screen name="Plant Info" component={PlantInfoScreen}/>
-    <Tab.Screen name="Treshold" component={EditThresholdScreen}/>
+    <Tab.Screen name="Plant Info" options={{
+          tabBarLabel: 'Plant Info',
+          tabBarIcon: ({ color, size }) => {
+            return <Icon name="tree" size={size} color={color} />
+          },
+        }} component={PlantInfoScreen}/>   
+    <Tab.Screen name="Threshold" options={{
+          tabBarLabel: 'Threshold',
+          tabBarIcon: ({ color, size }) => {
+            return <Icon name="chart-line" size={size} color={color} />
+          },
+        }} component={EditThresholdScreen}/>
     <Tab.Screen name="History" options={{
           tabBarLabel: 'History',
           tabBarIcon: ({ color, size }) => {
             return <Icon name="table-clock" size={size} color={color}/>;
           },
         }} component={HistoryScreen}/>
-    <Tab.Screen name="Profile" component={ProfileScreen} />
+    <Tab.Screen name="Profile" options={{
+          tabBarLabel: 'Profile',
+          tabBarIcon: ({ color, size }) => {
+            return <Icon name="face-man-profile" size={size} color={color}/>;
+          },
+        }} component={ProfileScreen} />
     
   </Tab.Navigator>
   );
