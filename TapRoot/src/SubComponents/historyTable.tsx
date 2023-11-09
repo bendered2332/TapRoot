@@ -1,39 +1,17 @@
 import * as React from 'react';
 import { DataTable } from 'react-native-paper';
+import mockData from '../mockData/mockData.json';
 
 const HistoryTable = () => {
   const [page, setPage] = React.useState<number>(0);
-  const [numberOfItemsPerPageList] = React.useState([2, 3, 4]);
+  const [numberOfItemsPerPageList] = React.useState([5, 10]);
   const [itemsPerPage, onItemsPerPageChange] = React.useState(
     numberOfItemsPerPageList[0]
   );
 
-  const [items] = React.useState([
-   {
-     key: 1,
-     name: 'Cupcake',
-     calories: 356,
-     fat: 16,
-   },
-   {
-     key: 2,
-     name: 'Eclair',
-     calories: 262,
-     fat: 16,
-   },
-   {
-     key: 3,
-     name: 'Frozen yogurt',
-     calories: 159,
-     fat: 6,
-   },
-   {
-     key: 4,
-     name: 'Gingerbread',
-     calories: 305,
-     fat: 3.7,
-   },
-  ]);
+  const [items] = React.useState(
+    mockData.data
+  );
 
   const from = page * itemsPerPage;
   const to = Math.min((page + 1) * itemsPerPage, items.length);
@@ -45,16 +23,14 @@ const HistoryTable = () => {
   return (
     <DataTable>
       <DataTable.Header>
-        <DataTable.Title>Dessert</DataTable.Title>
-        <DataTable.Title numeric>Calories</DataTable.Title>
-        <DataTable.Title numeric>Fat</DataTable.Title>
+        <DataTable.Title>Date</DataTable.Title>
+        <DataTable.Title numeric>Humidity</DataTable.Title>
       </DataTable.Header>
 
-      {items.slice(from, to).map((item) => (
-        <DataTable.Row key={item.key}>
-          <DataTable.Cell>{item.name}</DataTable.Cell>
-          <DataTable.Cell numeric>{item.calories}</DataTable.Cell>
-          <DataTable.Cell numeric>{item.fat}</DataTable.Cell>
+      {items.slice(from, to).map((item, i) => ( 
+        <DataTable.Row key={i}>
+          <DataTable.Cell>{item.date}</DataTable.Cell>
+          <DataTable.Cell numeric>{item.humidity.toFixed(2)}</DataTable.Cell>
         </DataTable.Row>
       ))}
 
