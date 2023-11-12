@@ -59,12 +59,14 @@ const Profile = () => {
   )
 };
 
-const styles = StyleSheet.create({
 
+const styles = StyleSheet.create({
   container: {
     marginHorizontal: 20,
     flex: 1,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    padding: 16,
+    position: 'relative',
   },
 
   input: {

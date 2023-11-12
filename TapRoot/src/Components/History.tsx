@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import mockData from '../mockData/mockData.json';
-import { View, Text, Button } from 'react-native';
+import { View, Text, Button, StyleSheet } from 'react-native';
 import { FIRESTORE_DB } from '../../firebaseConfig';
 import { QuerySnapshot, collection, getDocs, orderBy, query } from 'firebase/firestore';
 
@@ -35,7 +35,7 @@ export default function History(){
   }); 
 
   return (
-    <View>
+    <View style={styles.container}>
       {historyList.map(history =>{
         return (
           <Text key={history.id}>{history.value}</Text>
@@ -46,4 +46,13 @@ export default function History(){
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    position: 'relative',
+    backgroundColor: '#5DB075',
+  }
+})
 
