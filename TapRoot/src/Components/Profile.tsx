@@ -17,6 +17,7 @@ const Profile = () => {
       const response = await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
       alert("Sign in failed");
+      console.log("login failed")
     } finally {
       setLoading(false);
     }
@@ -33,6 +34,7 @@ const Profile = () => {
         }
       } else {
         alert("Sign up failed");
+        console.log("login failed")
       }
     } finally {
       setLoading(false);
