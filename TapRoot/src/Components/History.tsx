@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import mockData from '../mockData/mockData.json';
 import { View, Text, Button, StyleSheet } from 'react-native';
+import { Button } from 'react-native';
+import HistoryTable from '../SubComponents/historyTable';
 import { FIRESTORE_DB } from '../../firebaseConfig';
 import { QuerySnapshot, collection, getDocs, orderBy, query } from 'firebase/firestore';
+import { View, StyleSheet } from 'react-native';
 
 type HistoryTypeItem ={
   value: string;
@@ -41,8 +44,8 @@ export default function History(){
           <Text key={history.id}>{history.value}</Text>
         )
       })}
-      <Text>Me baby</Text>
-      <Text>This is the History screen which will show past api data in chart form??????TBD</Text>
+      <HistoryTable></HistoryTable>
+
     </View>
   );
 };
@@ -53,6 +56,8 @@ const styles = StyleSheet.create({
     padding: 16,
     position: 'relative',
     backgroundColor: '#5DB075',
+    justifyContent: 'center',
+    alignItems: "flex-start",
   }
-})
+});
 
