@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import mockData from '../mockData/mockData.json';
 import { View, Text, Button, StyleSheet } from 'react-native';
-import { Button } from 'react-native';
 import HistoryTable from '../SubComponents/historyTable';
 import { FIRESTORE_DB } from '../../firebaseConfig';
-import { QuerySnapshot, collection, getDocs, orderBy, query } from 'firebase/firestore';
-import { View, StyleSheet } from 'react-native';
+import { QuerySnapshot, collection, getDocs, query } from 'firebase/firestore';
 
 type HistoryTypeItem ={
   value: string;

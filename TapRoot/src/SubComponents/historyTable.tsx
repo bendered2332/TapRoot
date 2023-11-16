@@ -37,7 +37,6 @@ const HistoryTable = () => {
   };
   const handleSort = (key: string) => {
     const newSortDirection = sortDirection === 'ascending' ? 'descending' : 'ascending';
-    console.log("new: ", newSortDirection, "old: ",sortDirection);
     setSortDirection(newSortDirection);
     switch(key) { 
       case 'date': { 
