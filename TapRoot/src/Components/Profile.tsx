@@ -17,6 +17,7 @@ const Profile = () => {
       const response = await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
       alert("Sign in failed");
+      console.log("login failed")
     } finally {
       setLoading(false);
     }
@@ -33,6 +34,7 @@ const Profile = () => {
         }
       } else {
         alert("Sign up failed");
+        console.log("login failed")
       }
     } finally {
       setLoading(false);
@@ -59,12 +61,14 @@ const Profile = () => {
   )
 };
 
-const styles = StyleSheet.create({
 
+const styles = StyleSheet.create({
   container: {
     marginHorizontal: 20,
     flex: 1,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    padding: 16,
+    position: 'relative',
   },
 
   input: {

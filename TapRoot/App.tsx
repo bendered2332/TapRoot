@@ -2,16 +2,8 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { PaperProvider } from 'react-native-paper';
-import { BottomNavigation } from 'react-native-paper';
-import { View } from 'react-native';
+import { StyleSheet,SafeAreaView, ScrollView, StatusBar, } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {
-  StyleSheet,
-  Text,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-} from 'react-native';
 // import screens
 import DashboardScreen from './src/Components/Dashboard';
 import ProfileScreen from './src/Components/Profile';
@@ -33,22 +25,38 @@ export default function App() {
 const Tab = createBottomTabNavigator();
 function MyTabs() {
   return (
-      <Tab.Navigator> 
-        <Tab.Screen name="Dashboard"options={{
-              tabBarLabel: 'Dashboard',
-              tabBarIcon: ({ color, size }) => {
-                return <Icon name="view-dashboard" size={size} color={color} />;
-              },
-            }} component={DashboardScreen}/>
-        <Tab.Screen name="Plant Info" component={PlantInfoScreen}/>
-        <Tab.Screen name="Treshold" component={EditThresholdScreen}/>
-        <Tab.Screen name="History" options={{
-              tabBarLabel: 'History',
-              tabBarIcon: ({ color, size }) => {
-                return <Icon name="table-clock" size={size} color={color}/>;
-              },
-            }} component={HistoryScreen}/>
-        <Tab.Screen name="Profile" component={ProfileScreen} />
+    <Tab.Navigator> 
+    <Tab.Screen name="Dashboard" options={{
+          tabBarLabel: 'Dashboard',
+          tabBarIcon: ({ color, size }) => {
+            return <Icon name="home" size={size} color={color} />;
+          },
+        }} component={DashboardScreen}/>
+    <Tab.Screen name="Plant Info" options={{
+          tabBarLabel: 'Plant Info',
+          tabBarIcon: ({ color, size }) => {
+            return <Icon name="tree" size={size} color={color} />
+          },
+        }} component={PlantInfoScreen}/>   
+    <Tab.Screen name="Threshold" options={{
+          tabBarLabel: 'Threshold',
+          tabBarIcon: ({ color, size }) => {
+            return <Icon name="chart-line" size={size} color={color} />
+          },
+        }} component={EditThresholdScreen}/>
+    <Tab.Screen name="History" options={{
+          tabBarLabel: 'History',
+          tabBarIcon: ({ color, size }) => {
+            return <Icon name="table-clock" size={size} color={color}/>;
+          },
+        }} component={HistoryScreen}/>
+    <Tab.Screen name="Profile" options={{
+          tabBarLabel: 'Profile',
+          tabBarIcon: ({ color, size }) => {
+            return <Icon name="face-man-profile" size={size} color={color}/>;
+          },
+        }} component={ProfileScreen} />
+
       </Tab.Navigator>
   );
 }

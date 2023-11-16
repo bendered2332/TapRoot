@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import mockData from '../mockData/mockData.json';
-import { Text, Button } from 'react-native';
+import { View, Text, Button, StyleSheet } from 'react-native';
 import HistoryTable from '../SubComponents/historyTable';
 import { FIRESTORE_DB } from '../../firebaseConfig';
-import { QuerySnapshot, collection, getDocs, orderBy, query } from 'firebase/firestore';
-import { View, StyleSheet } from 'react-native';
+import { QuerySnapshot, collection, getDocs, query } from 'firebase/firestore';
 
 type HistoryTypeItem ={
   value: string;
@@ -37,7 +35,7 @@ export default function History(){
   }); 
 
   return (
-    <View>
+    <View style={styles.container}>
       {historyList.map(history =>{
         return (
           <Text key={history.id}>{history.value}</Text>
@@ -52,8 +50,11 @@ export default function History(){
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 16,
+    position: 'relative',
+    backgroundColor: '#5DB075',
     justifyContent: 'center',
     alignItems: "flex-start",
-  },
+  }
 });
 
