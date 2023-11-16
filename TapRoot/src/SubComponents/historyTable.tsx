@@ -9,9 +9,8 @@ const HistoryTable = () => {
     humidity: number;
     id: number;
   }
-  console.log(mockData.data[4]);
   const [page, setPage] = React.useState<number>(0);
-  const [numberOfItemsPerPageList] = React.useState([5, 10]);
+  const [numberOfItemsPerPageList] = React.useState([5, 10, 20]);
   const [itemsPerPage, onItemsPerPageChange] = React.useState(
     numberOfItemsPerPageList[0]
   );
