@@ -1,10 +1,12 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet} from 'react-native';
+import ThresholdChart from '../SubComponents/thresholdChart';
 
 const EditThreshold = () => {
   return (
     <View style={styles.container}>
       <Text>This is the Edit Threshold screen where you can se the threshold and get notifications on when it hits! </Text>
+      <ThresholdChart></ThresholdChart>
     </View>
   );
 };
