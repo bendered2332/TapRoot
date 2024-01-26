@@ -18,19 +18,10 @@ const ThresholdChart: React.FC<ThresholdChartProps> = ({ data }) => {
     humidity: number;
   } | null>(null);
 
-  const onPointPress = (point: { index: number; value: number }) => {
-    const selectedEntry = data[point.index];
-    setSelectedPoint({
-      date: selectedEntry.date,
-      time: selectedEntry.time,
-      humidity: selectedEntry.humidity,
-    });
-  };
-
   //  unique dates from the data
   const uniqueDates = Array.from(new Set(data.map((entry) => entry.date)));
 
-  // Get first entry for each date - not working 
+  // Get first entry for each date 
   const firstRecordings = uniqueDates.map((date) => {
     const firstEntry = data.find((entry) => entry.date === date);
     return firstEntry ? { date, time: firstEntry.time, humidity: firstEntry.humidity } : null;
@@ -41,15 +32,25 @@ const ThresholdChart: React.FC<ThresholdChartProps> = ({ data }) => {
     .filter((_, index) => index % 2 === 0) // Include every other date
     .map((entry) => entry.date.slice(5)); // Extracts month and day
 
-  const chartData = {
-    labels: timeLabels,
-    datasets: [
-      {
-        data: firstRecordings.map((entry) => entry.humidity),
-        color: (opacity = 1) => `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, ${opacity})`,
-        strokeWidth: 2,
-      },
-    ],
+const chartData = {
+  labels: timeLabels,
+  datasets: [
+    {
+      data: firstRecordings.map((entry) => entry.humidity),
+      color: (opacity: number) => `rgba(90, 142, 215, ${opacity})`,
+      strokeWidth: 2,
+    },
+  ],
+};
+
+
+  const onPointPress = (point: { index: number; value: number }) => {
+    const selectedEntry = firstRecordings[point.index];
+    setSelectedPoint({
+      date: selectedEntry.date,
+      time: selectedEntry.time,
+      humidity: selectedEntry.humidity,
+    });
   };
 
   return (
