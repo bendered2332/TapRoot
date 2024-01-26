@@ -27,16 +27,16 @@ const ThresholdChart: React.FC<ThresholdChartProps> = ({ data }) => {
     });
   };
 
-  // Extract unique dates from the data
+  //  unique dates from the data
   const uniqueDates = Array.from(new Set(data.map((entry) => entry.date)));
 
-  // Extract the first recording for each date
+  // Get first entry for each date - not working 
   const firstRecordings = uniqueDates.map((date) => {
     const firstEntry = data.find((entry) => entry.date === date);
     return firstEntry ? { date, time: firstEntry.time, humidity: firstEntry.humidity } : null;
   }).filter(Boolean) as { date: string; time: string; humidity: number }[];
 
-  // Extract time labels in "mm-dd" format from the first recording data, including every other date
+  // mm-dd format for x axis
   const timeLabels = firstRecordings
     .filter((_, index) => index % 2 === 0) // Include every other date
     .map((entry) => entry.date.slice(5)); // Extracts month and day
