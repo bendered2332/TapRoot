@@ -30,19 +30,8 @@ const ThresholdChart: React.FC<ThresholdChartProps> = ({ data }) => {
   // mm-dd format for x axis
   const timeLabels = firstRecordings
     .filter((_, index) => index % 2 === 0) // Include every other date
-    .map((entry) => entry.date.slice(5)); // Extracts month and day
-
-const chartData = {
-  labels: timeLabels,
-  datasets: [
-    {
-      data: firstRecordings.map((entry) => entry.humidity),
-      color: (opacity: number) => `rgba(90, 142, 215, ${opacity})`,
-      strokeWidth: 2,
-    },
-  ],
-};
-
+    .map((entry) => entry.date.slice(5)) // Extracts month and day
+    .reverse(); // REverse the data points on x-axis
 
   const onPointPress = (point: { index: number; value: number }) => {
     const selectedEntry = firstRecordings[point.index];
@@ -52,6 +41,17 @@ const chartData = {
       humidity: selectedEntry.humidity,
     });
   };
+
+const chartData = {
+  labels: timeLabels,
+  datasets: [
+    {
+      data: firstRecordings.reverse().map((entry) => entry.humidity),// to display points in correct order
+      color: (opacity: number) => `rgba(90, 142, 215, ${opacity})`,
+      strokeWidth: 2,
+    },
+  ],
+};
 
   return (
     <View>
