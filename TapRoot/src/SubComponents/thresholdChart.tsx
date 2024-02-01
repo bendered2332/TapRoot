@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 
 interface ThresholdChartProps {
@@ -18,19 +18,16 @@ const ThresholdChart: React.FC<ThresholdChartProps> = ({ data }) => {
     humidity: number;
   } | null>(null);
 
-  //  unique dates from the data
   const uniqueDates = Array.from(new Set(data.map((entry) => entry.date)));
-
-  // Get first entry for each date 
+  
   const firstRecordings = uniqueDates.reverse().map((date) => {
     const firstEntry = data.find((entry) => entry.date === date);
     return firstEntry ? { date, time: firstEntry.time, humidity: firstEntry.humidity } : null;
   }).filter(Boolean) as { date: string; time: string; humidity: number }[];
 
-  // mm-dd format for x axis
   const timeLabels = firstRecordings
-    .filter((_, index) => index % 2 === 0) // Include every other date
-    .map((entry) => entry.date.slice(5)) // Extracts month and day
+    .filter((_, index) => index % 2 === 0) // every other date for x axis 
+    .map((entry) => entry.date.slice(5)); // extract month and day - mm/dd remove year
 
   const onPointPress = (point: { index: number; value: number }) => {
     const selectedEntry = firstRecordings[point.index];
@@ -41,20 +38,20 @@ const ThresholdChart: React.FC<ThresholdChartProps> = ({ data }) => {
     });
   };
 
-const chartData = {
-  labels: timeLabels,
-  datasets: [
-    {
-      data: firstRecordings.map((entry) => entry.humidity),// to display points in correct order
-      color: (opacity: number) => `rgba(90, 142, 215, ${opacity})`,
-      strokeWidth: 2,
-    },
-  ],
-};
+  const chartData = {
+    labels: timeLabels,
+    datasets: [
+      {
+        data: firstRecordings.map((entry) => entry.humidity), // display points in correct order
+        color: (opacity: number) => `rgba(90, 142, 215, ${opacity})`,
+        strokeWidth: 2,
+      },
+    ],
+  };
 
   return (
-    <View>
-      <Text>Humidity Chart</Text>
+    <View style={styles.container}>
+      <Text style={styles.chartTitle}>Humidity Chart</Text>
       <LineChart
         data={chartData}
         width={300}
@@ -72,15 +69,31 @@ const chartData = {
         bezier
         onDataPointClick={onPointPress}
       />
-      {selectedPoint && (
-        <View>
-          <Text>Date: {selectedPoint.date}</Text>
-          <Text>Time: {selectedPoint.time}</Text>
-          <Text>Humidity: {selectedPoint.humidity}</Text>
-        </View>
-      )}
+      {selectedPoint && <Tooltip selectedPoint={selectedPoint} />}
     </View>
   );
 };
+
+const Tooltip: React.FC<{ selectedPoint: { date: string; time: string; humidity: number } }> = ({ selectedPoint }) => (
+  <View style={styles.tooltipContainer}>
+    <Text>Date: {selectedPoint.date}</Text>
+    <Text>Time: {selectedPoint.time}</Text>
+    <Text>Humidity: {selectedPoint.humidity}</Text>
+  </View>
+);
+
+const styles = StyleSheet.create({
+  container: {
+    // container styles if needed
+  },
+  chartTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  tooltipContainer: {
+    //  tooltip container styles if needed
+  },
+});
 
 export default ThresholdChart;
