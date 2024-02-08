@@ -2,13 +2,19 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 
+interface Reading {
+  time: string;
+  humidity: number;
+}
+
+interface DateEntry {
+  date: string;
+  readings: Reading[];
+  id: number;
+}
+
 interface ThresholdChartProps {
-  data: {
-    date: string;
-    time: string;
-    humidity: number;
-    id: number;
-  }[];
+  data: DateEntry[];
 }
 
 const ThresholdChart: React.FC<ThresholdChartProps> = ({ data }) => {
@@ -18,31 +24,40 @@ const ThresholdChart: React.FC<ThresholdChartProps> = ({ data }) => {
     humidity: number;
   } | null>(null);
 
-  const uniqueDates = Array.from(new Set(data.map((entry) => entry.date)));
-  
-  const firstRecordings = uniqueDates.reverse().map((date) => {
-    const firstEntry = data.find((entry) => entry.date === date);
-    return firstEntry ? { date, time: firstEntry.time, humidity: firstEntry.humidity } : null;
-  }).filter(Boolean) as { date: string; time: string; humidity: number }[];
+  const dateLabels: string[] = [];
+  const humidityData: number[] = [];
 
-  const timeLabels = firstRecordings
-    .filter((_, index) => index % 2 === 0) // every other date for x axis 
-    .map((entry) => entry.date.slice(5)); // extract month and day - mm/dd remove year
+  data.forEach((dateEntry, index) => {
+    // Using the last reading for each date
+    const lastReading = dateEntry.readings[dateEntry.readings.length - 1];
+    if (lastReading) {
+      // Add every other label to the dateLabels array
+      if (index % 2 === 0) {
+        dateLabels.push(dateEntry.date.slice(5)); // get only the mm:dd part
+      } else {
+        dateLabels.push(''); // Add an empty string for labels to be skipped
+      }
+      humidityData.push(lastReading.humidity);
+    }
+  });
 
   const onPointPress = (point: { index: number; value: number }) => {
-    const selectedEntry = firstRecordings[point.index];
-    setSelectedPoint({
-      date: selectedEntry.date,
-      time: selectedEntry.time,
-      humidity: selectedEntry.humidity,
-    });
+    const selectedEntry = data[point.index];
+    const lastReading = selectedEntry.readings[selectedEntry.readings.length - 1];
+    if (lastReading) {
+      setSelectedPoint({
+        date: selectedEntry.date,
+        time: lastReading.time,
+        humidity: lastReading.humidity,
+      });
+    }
   };
 
   const chartData = {
-    labels: timeLabels,
+    labels: dateLabels,
     datasets: [
       {
-        data: firstRecordings.map((entry) => entry.humidity), // display points in correct order
+        data: humidityData,
         color: (opacity: number) => `rgba(90, 142, 215, ${opacity})`,
         strokeWidth: 2,
       },
@@ -84,7 +99,7 @@ const Tooltip: React.FC<{ selectedPoint: { date: string; time: string; humidity:
 
 const styles = StyleSheet.create({
   container: {
-    // container styles if needed
+    // Add container styles if needed
   },
   chartTitle: {
     fontSize: 18,
@@ -92,8 +107,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   tooltipContainer: {
-    //  tooltip container styles if needed
+    // Add tooltip container styles if needed
   },
 });
 
 export default ThresholdChart;
+
