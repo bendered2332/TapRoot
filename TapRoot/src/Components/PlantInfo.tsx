@@ -1,20 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { ScrollView, View, StyleSheet, TouchableOpacity, Text, Image } from 'react-native';
-import { Searchbar } from 'react-native-paper';
-
-interface Plant {
-  id: number;
-  common_name: string;
-  image_url: string;
-  ground_humidity: number;
-}
-
-// interface PlantCare {
-//   id: number;
-//   water: string;
-//   sunlight: string;
-//   // Add more properties as needed
-// }
+import { Searchbar } from 'react-native-paper';import {Plant} from '../SubComponents/plant';
 
 const PlantInfo: React.FC = () => {
   const [search, setSearch] = useState('');
@@ -22,28 +8,24 @@ const PlantInfo: React.FC = () => {
   const [selectedPlant, setSelectedPlant] = useState<Plant | null>(null);
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const TREFLE_API_KEY = '3ZX2ZZ7ZhgGiN233l_cOWmrBjNOvucjg1ZIDKeA2D64';
-  const TREFLE_PLANTS_API_ENDPOINT = `https://trefle.io/api/v1/plants?token=${TREFLE_API_KEY}&q=`;
-
-
-  const dropdownRef = useRef<View>(null);
+  const PLANT_API_ENDPOINT = 'https://perenual.com/api/species-list?page=1&key=sk-Gbz165bc10560ff033875&indoor=1';
 
   useEffect(() => {
     const fetchPlants = async () => {
       try {
-        const trefleResponse = await fetch(`${TREFLE_PLANTS_API_ENDPOINT}${search}`);
+        const PlantResponse = await fetch(`${PLANT_API_ENDPOINT}`);
 
-        if (!trefleResponse.ok) {
-          throw new Error('Failed to fetch Trefle data');
+        if (!PlantResponse.ok) {
+          throw new Error('Failed to fetch Plant data');
         }
     
-        const trefleData = await trefleResponse.json();
+        const PlantData = await PlantResponse.json();
 
-        console.log('Trefle Data:', trefleData);
-        // Handle the data from Trefle API
+        console.log('Plant Data:', PlantData);
+        // Handle the data from Plant API
       
-        setSearchResults(trefleData.data);
-        setShowDropdown(trefleData.data.length > 0);
+        setSearchResults(PlantData.data);
+        setShowDropdown(PlantData.data.length > 0);
       } catch (error) {
         console.error('Error fetching plant data:', error);
       }
@@ -89,7 +71,7 @@ const PlantInfo: React.FC = () => {
             value={search}
           />
           {showDropdown && (
-            <View style={styles.dropdown} ref={dropdownRef}>
+            <View style={styles.dropdown}>
               {filteredPlants.map((plant: Plant) => (
                 <TouchableOpacity
                   key={plant.id}
@@ -102,15 +84,13 @@ const PlantInfo: React.FC = () => {
             </View>
           )}
         </View>
-        {selectedPlant && (
+        {selectedPlant && selectedPlant.default_image && (
         <View>
-          <Text style={styles.selectedPlant}>Selected Plant: {selectedPlant.common_name}</Text>
-          <Image source={{ uri: selectedPlant.image_url }} style={styles.plantImage} />
-            <Text style={styles.soilHumidity}>
-              Soil Humidity: {selectedPlant.ground_humidity}
-            </Text>
-        </View>
-        )}
+        <Text style={styles.selectedPlant}>Selected Plant: {selectedPlant.common_name}</Text>
+        <Image source={{ uri: selectedPlant.default_image.original_url }} style={styles.plantImage} />
+        <Text style={styles.wateringStyle}>Watering: {selectedPlant.watering}</Text>
+      </View>
+      )}
       </View>
     </ScrollView>
   );
@@ -134,7 +114,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     backgroundColor: '#fff',
-    borderWidth: 1,
     borderColor: '#ddd',
     marginTop: 58,
     zIndex: 1,
@@ -149,6 +128,7 @@ const styles = StyleSheet.create({
     height: 400,
     padding: 20,
     borderRadius: 25,
+    resizeMode: 'cover',
   },
   selectedPlant: {
     paddingTop: 40,
@@ -156,7 +136,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
-  soilHumidity: {
+  wateringStyle: {
     paddingTop: 20,
     marginBottom: 20,
     fontSize: 20,
