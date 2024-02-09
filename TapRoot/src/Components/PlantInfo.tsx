@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { ScrollView, View, StyleSheet, TouchableOpacity, Text, Image } from 'react-native';
-import { Searchbar } from 'react-native-paper';import {Plant} from '../SubComponents/plant';
+import { Searchbar } from 'react-native-paper';
+import {Plant} from '../SubComponents/plant';
 
-const PlantInfo: React.FC = () => {
+const PlantInfoComponent: React.FC = () => {
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState<Plant[]>([]);
   const [selectedPlant, setSelectedPlant] = useState<Plant | null>(null);
@@ -144,4 +145,4 @@ const styles = StyleSheet.create({
 },
 });
 
-export default PlantInfo;
+export default PlantInfoComponent;
