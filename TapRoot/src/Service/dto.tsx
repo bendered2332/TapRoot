@@ -14,5 +14,7 @@ export interface ThresholdChartProps {
     data: DataEntry[];
 }
   
-
+export interface DbProps {
+    data: DataEntry[];
+}
 
