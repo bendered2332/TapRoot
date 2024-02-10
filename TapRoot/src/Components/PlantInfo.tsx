@@ -14,19 +14,19 @@ const PlantInfoComponent: React.FC = () => {
   useEffect(() => {
     const fetchPlants = async () => {
       try {
-        const PlantResponse = await fetch(`${PLANT_API_ENDPOINT}`);
+        const plantResponse = await fetch(`${PLANT_API_ENDPOINT}`);
 
-        if (!PlantResponse.ok) {
+        if (!plantResponse.ok) {
           throw new Error('Failed to fetch Plant data');
         }
     
-        const PlantData = await PlantResponse.json();
+        const plantData = await plantResponse.json();
 
-        console.log('Plant Data:', PlantData);
+        console.log('Plant Data:', plantData);
         // Handle the data from Plant API
       
-        setSearchResults(PlantData.data);
-        setShowDropdown(PlantData.data.length > 0);
+        setSearchResults(plantData.data);
+        setShowDropdown(plantData.data.length > 0);
       } catch (error) {
         console.error('Error fetching plant data:', error);
       }
