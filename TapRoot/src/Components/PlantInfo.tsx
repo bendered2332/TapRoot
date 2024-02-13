@@ -1,7 +1,9 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState} from 'react';
 import { ScrollView, View, StyleSheet, TouchableOpacity, Text, Image } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import {Plant} from '../SubComponents/plant';
+import mockData from '../mockData/PlantAPI-Data.json';
+
 
 const PlantInfoComponent: React.FC = () => {
   const [search, setSearch] = useState('');
@@ -9,57 +11,42 @@ const PlantInfoComponent: React.FC = () => {
   const [selectedPlant, setSelectedPlant] = useState<Plant | null>(null);
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const PLANT_API_ENDPOINT = 'https://perenual.com/api/species-list?page=1&key=sk-Gbz165bc10560ff033875&indoor=1';
 
   useEffect(() => {
-    const fetchPlants = async () => {
-      try {
-        const plantResponse = await fetch(`${PLANT_API_ENDPOINT}`);
-
-        if (!plantResponse.ok) {
-          throw new Error('Failed to fetch Plant data');
+    //Filters mockData to include plant attributes
+    if (mockData && mockData.data && Array.isArray(mockData.data)) {
+      const uniqueNames = new Set<string>();
+      const filteredData = mockData.data.filter((plant: Plant) => {
+        //Removes duplicate plant names and filters search 
+        const name = plant.common_name.toLowerCase();
+        const nameMatch = name.includes(search.toLowerCase());
+        if (nameMatch && !uniqueNames.has(name)) {
+          uniqueNames.add(name);
+          return true; 
         }
-    
-        const plantData = await plantResponse.json();
-
-        console.log('Plant Data:', plantData);
-        // Handle the data from Plant API
-      
-        setSearchResults(plantData.data);
-        setShowDropdown(plantData.data.length > 0);
-      } catch (error) {
-        console.error('Error fetching plant data:', error);
-      }
-    };
-    
-
-    if (search.length > 0) {
-      fetchPlants();
-    } else {
-      setShowDropdown(false);
-    }
-
+        return false;
+      });
+    console.log('Filtered Data:', filteredData)
+    setSearchResults(filteredData);
+    setShowDropdown(search.trim() !== '');
     setSelectedPlant(null);
-  }, [search]);
+  }
+}, [search]);
 
-  const filteredPlants = searchResults.filter(
-    (plant) =>
-      plant.common_name?.toLowerCase().includes(search.toLowerCase())
-      )
-  const handleSelectPlant = (plant: Plant) => {
-    setSelectedPlant(plant);
-    setSearch(plant.common_name);
-    setShowDropdown(false);
-  };
+const handleSelectPlant = (plant: Plant) => {
+  setSelectedPlant(plant);
+  setSearch(plant.common_name);
+  setShowDropdown(false);
+};
 
-  const handleSearchbarClick = () => {
-    setShowDropdown(true);
-  };
+const handleSearchbarClick = () => {
+  setShowDropdown(true);
+};
 
-  const handleSearchChange = (text: string) => {
-    setSearch(text);
-    setShowDropdown(true);
-  };
+const handleSearchChange = (text: string) => {
+  setSearch(text);
+  setShowDropdown(true);
+};
 
   return (
     <ScrollView style={styles.scrollView}>
@@ -73,7 +60,7 @@ const PlantInfoComponent: React.FC = () => {
           />
           {showDropdown && (
             <View style={styles.dropdown}>
-              {filteredPlants.map((plant: Plant) => (
+              {searchResults.map((plant: Plant) => (
                 <TouchableOpacity
                   key={plant.id}
                   style={styles.dropdownItem}
@@ -112,11 +99,11 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   dropdown: {
-    position: 'absolute',
+    position: 'relative',
     width: '100%',
     backgroundColor: '#fff',
     borderColor: '#ddd',
-    marginTop: 58,
+    marginTop: 10,
     zIndex: 1,
   },
   dropdownItem: {

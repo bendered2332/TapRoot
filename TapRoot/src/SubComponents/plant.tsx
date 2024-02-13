@@ -4,5 +4,5 @@ export interface Plant {
   watering:string;
   default_image: {
     original_url:string
-  },
+  } | null;
 } 
