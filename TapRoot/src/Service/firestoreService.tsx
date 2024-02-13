@@ -1,5 +1,5 @@
 import { DataEntry } from "./dto";
-import { getDoc, doc } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import 'firebase/firestore';
 import { FIRESTORE_DB } from '../../firebaseConfig';
 
@@ -9,9 +9,11 @@ class FirestoreService {
     try {
       const docRef = doc(FIRESTORE_DB, collectionName, documentId);
       const docSnapshot = await getDoc(docRef);
-
+  
       if (docSnapshot.exists()) {
         const data = docSnapshot.data() as DataEntry[];
+        console.log("Document found");
+        console.log(data)
         return data;
       } else {
         console.log("Document not found");
@@ -22,6 +24,7 @@ class FirestoreService {
       throw error;
     }
   }
+  
 }
 
 export default FirestoreService;
