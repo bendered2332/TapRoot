@@ -116,12 +116,11 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start', 
   },
   card2: {
-    marginTop: 80,
+    marginTop: 20,
     paddingTop: 20,
     paddingBottom: 40,
     backgroundColor: '#fff',
     borderRadius: 8,
-    marginBottom: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
