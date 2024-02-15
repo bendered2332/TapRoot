@@ -13,8 +13,7 @@ class FirestoreService {
       if (docSnapshot.exists()) {
         const data = docSnapshot.data() as DataEntry[];
         console.log("Document found");
-        console.log(data)
-        return data;
+        return data.data; // .data is returning the variable that contians the array
       } else {
         console.log("Document not found");
         return null;

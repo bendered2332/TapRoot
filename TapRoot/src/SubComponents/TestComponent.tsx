@@ -14,7 +14,7 @@ const YourComponent: React.FC = () => {
         const dataService = new DataService();
         //console.log("service created making data request")
         const data = await dataService.getData(collectionName, documentName);
-        console.log("Data is back to the component page, ", data);
+        console.log("Data is back to the component page");
 
         if (data) {
           setDataEntries(data);
@@ -28,12 +28,17 @@ const YourComponent: React.FC = () => {
     fetchData();
   }, []);
 
+  dataEntries? console.log("Is not NUll"): console.log("IS NULL");
+  dataEntries?.map((entry: DataEntry, index: number) => {
+    console.log(entry);
+  });
+
   return (
     <View>
       <Text>Data Entries:</Text>
       {dataEntries ? (
         <View>
-          {dataEntries.data.map((entry: DataEntry, index: number) => (
+          {dataEntries.map((entry: DataEntry, index: number) => (
             <View key={index}>
               <Text>Date: {entry.date}</Text>
               <Text>ID: {entry.id}</Text>
@@ -41,6 +46,7 @@ const YourComponent: React.FC = () => {
               {entry.readings.map((reading: Reading, index: number) => (
                 <View key={index}>
                   <Text>Reading Humidity: {reading.humidity}</Text>
+                  <Text>Reading Time: {reading.time}</Text>
                 </View>
               ))}
             </View>
