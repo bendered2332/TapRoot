@@ -1,21 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
-
-interface Reading {
-  time: string;
-  humidity: number;
-}
-
-interface DateEntry {
-  date: string;
-  readings: Reading[];
-  id: number;
-}
-
-interface ThresholdChartProps {
-  data: DateEntry[];
-}
+import {Reading, DataEntry, ThresholdChartProps} from '../Service/dto';
 
 const ThresholdChart: React.FC<ThresholdChartProps> = ({ data }) => {
   const [selectedPoint, setSelectedPoint] = useState<{
@@ -27,13 +13,13 @@ const ThresholdChart: React.FC<ThresholdChartProps> = ({ data }) => {
   const dateLabels: string[] = [];
   const humidityData: number[] = [];
 
-  data.forEach((dateEntry, index) => {
+  data.forEach((dataEntry, index) => {
     // Using the last reading for each date
-    const lastReading = dateEntry.readings[dateEntry.readings.length - 1];
+    const lastReading = dataEntry.readings[dataEntry.readings.length - 1];
     if (lastReading) {
       // Add every other label to the dateLabels array
       if (index % 2 === 0) {
-        dateLabels.push(dateEntry.date.slice(5)); // get only the mm:dd part
+        dateLabels.push(dataEntry.date.slice(5)); // get only the mm:dd part
       } else {
         dateLabels.push(''); // Add an empty string for labels to be skipped
       }
