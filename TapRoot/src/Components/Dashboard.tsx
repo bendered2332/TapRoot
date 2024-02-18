@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Svg, {Circle} from 'react-native-svg';
+import { getDatabase, ref, set} from "firebase/database";
+import { realTimeDB } from '../../firebaseConfig';
+
 
 const Dashboard = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -35,10 +38,21 @@ const Dashboard = () => {
 
   const handleButtonPress = () => {
     // Update the time when the button is pressed
+    const sensorID = "testSensor";
+    const humidityLevel = 400;
     setCurrentTime(new Date());
-    setHumidityPercentage(Math.floor(Math.random() * 60));
+    setHumidityPercentage(humidityLevel);    
+    writePlantHumidityLevel(sensorID, humidityLevel);
     console.log('Button Pressed!');
+
   };
+
+  function writePlantHumidityLevel(sensorID: string, humidityLevel: number){
+    const db = getDatabase();
+    set(ref(db,'sensorID/' + sensorID), {
+      humidityLevel: humidityLevel       
+    });
+  }
 
   return (
     <View style={styles.container}>
