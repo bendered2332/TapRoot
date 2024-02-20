@@ -1,16 +1,34 @@
-import React from 'react';
 import { View, Text, Button, StyleSheet} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { DataEntry, Reading } from '../Service/dto';
+import DataService from '../Service/firestoreService';
 import ThresholdChart from '../SubComponents/thresholdChart';
-import mockData from '../mockData/mockData.json';
-import refactoredMockData from '../mockData/refactoredMockData.json'
-import YourComponent from '../SubComponents/TestComponent';
 
 const EditThreshold = () => {
+  const [dataEntries, setDataEntries] = useState<DataEntry[]>([]);
+  const documentName = "DataEntry";
+  const collectionName = "Data";
+  const dataService = new DataService();
+
+  useEffect(() => {
+    const fetchAllData = async () => {
+      try {
+        const data = await dataService.getAllData(collectionName, documentName);
+        if (data) {
+          setDataEntries(data);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchAllData();
+  }, []);
+
   return (
     <View style={styles.container}>
       <Text>This is the Edit Threshold screen where you can se the threshold and get notifications on when it hits! </Text>
-      <ThresholdChart data={refactoredMockData.data}/>
-      <YourComponent></YourComponent>
+      <ThresholdChart data={dataEntries}/>
     </View>
   );
 };

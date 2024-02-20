@@ -3,7 +3,10 @@ import { View, Text, StyleSheet } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import {Reading, DataEntry, ThresholdChartProps} from '../Service/dto';
 
-const ThresholdChart: React.FC<ThresholdChartProps> = ({ data }) => {
+const ThresholdChart = ({ data }: { data: DataEntry[] }) => {
+  if (!data || data.length === 0) {
+    return <Text>No data available</Text>;
+  }
   const [selectedPoint, setSelectedPoint] = useState<{
     date: string;
     time: string;
