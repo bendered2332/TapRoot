@@ -3,7 +3,7 @@ export interface Reading {
     time: string;
     humidity: number;
 }
-
+// main object in the db
 export interface DataEntry {
     date: string;
     readings: Reading[];
