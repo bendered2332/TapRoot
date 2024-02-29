@@ -1,16 +1,16 @@
-import React, { useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, View, StyleSheet, TouchableOpacity, Text, Image } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import {Plant} from '../SubComponents/plant';
 import mockData from '../mockData/PlantAPI-Data.json';
-
+import { Dimensions } from 'react-native';
+const { width, height } = Dimensions.get('window');
 
 const PlantInfoComponent: React.FC = () => {
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState<Plant[]>([]);
   const [selectedPlant, setSelectedPlant] = useState<Plant | null>(null);
   const [showDropdown, setShowDropdown] = useState(false);
-
 
   useEffect(() => {
     //Filters mockData to include plant attributes
@@ -26,7 +26,6 @@ const PlantInfoComponent: React.FC = () => {
         }
         return false;
       });
-    console.log('Filtered Data:', filteredData)
     setSearchResults(filteredData);
     setShowDropdown(search.trim() !== '');
     setSelectedPlant(null);
@@ -73,7 +72,7 @@ const handleSearchChange = (text: string) => {
           )}
         </View>
         {selectedPlant && selectedPlant.default_image && (
-        <View>
+        <View style={styles.resultContainer}>
         <Text style={styles.selectedPlant}>Selected Plant: {selectedPlant.common_name}</Text>
         <Image source={{ uri: selectedPlant.default_image.original_url }} style={styles.plantImage} />
         <Text style={styles.wateringStyle}>Watering: {selectedPlant.watering}</Text>
@@ -95,6 +94,12 @@ const styles = StyleSheet.create({
     position: 'relative',
     backgroundColor: '#5DB075',
   },
+  resultContainer: {
+    flex: 1,
+    //padding: 16,
+    position: 'relative',
+    backgroundColor: '#5DB075',
+  },
   searchContainer: {
     position: 'relative',
   },
@@ -112,11 +117,11 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ddd',
   },
   plantImage: {
-    width: 380,
+    width: width-(width *.10),
     height: 400,
-    padding: 20,
+    paddingRight: 100,
     borderRadius: 25,
-    resizeMode: 'cover',
+    //resizeMode: 'cover',
   },
   selectedPlant: {
     paddingTop: 40,
