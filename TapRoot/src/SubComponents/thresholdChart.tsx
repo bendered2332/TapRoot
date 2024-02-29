@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
-import {Reading, DataEntry, ThresholdChartProps} from '../Service/dto';
+import { DataEntry} from '../Service/dto';
+import { ActivityIndicator, MD2Colors } from 'react-native-paper';
 
 const ThresholdChart = ({ data, isSevenDay }: { data: DataEntry[], isSevenDay: boolean }) => {
     if (!data || data.length === 0) {
-      return <Text>No data available</Text>;
+      return <ActivityIndicator animating={true} color={MD2Colors.purple600} />
     }
     const [selectedPoint, setSelectedPoint] = useState<{
       date: string;
@@ -42,7 +43,7 @@ const ThresholdChart = ({ data, isSevenDay }: { data: DataEntry[], isSevenDay: b
             dataEntry.readings.forEach((readingVal, index) =>{
               humidityData.push(readingVal.humidity) // store the humididity data
 
-              if (index % 3 === 0) { // get every third, every 3 hours
+              if (index % 2 === 0) { // get every second, every 2 point
                 dateLabels.push(readingVal.time.substring(0,5)); // get only the hh:mm part
               } else {
                 dateLabels.push(''); // Add an empty string for labels to be skipped
