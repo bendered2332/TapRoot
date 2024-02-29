@@ -13,7 +13,7 @@ class FirestoreService {
       if (docSnapshot.exists()) {
         const data = docSnapshot.data() as DataEntry[];
         console.log("Document found");
-        let result = data.data; // .data is returning the variable that contians the array
+        let result = data.Data; // .Data is returning the variable that contians the array_ case sensitive use "Data"
         return result; 
       } else {
         console.log("Document not found");
@@ -34,7 +34,7 @@ class FirestoreService {
       if (docSnapshot.exists()) {
         const data = docSnapshot.data() as DataEntry[];
         console.log("Document found");
-        let result = data.data; // .data is returning the variable that contians the array
+        let result = data.Data; // .Data is returning the variable that contians the array_ case sensitive use "Data"
         let lastElement = result[result.length - 1];
         return lastElement; 
       } else {

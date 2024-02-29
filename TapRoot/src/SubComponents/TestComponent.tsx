@@ -6,7 +6,7 @@ import DataService from '../Service/firestoreService';
 const YourComponent: React.FC = () => {
   const [dataEntries, setDataEntries] = useState<DataEntry[] | null>(null); // set null
   const [lastEntry, setLastEntry] = useState<DataEntry | null>(null);
-  const documentName = "DataEntry";
+  const documentName = "EntryData";
   const collectionName = "Data";
   const dataService = new DataService();
 
