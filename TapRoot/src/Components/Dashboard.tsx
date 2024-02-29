@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import Svg, {Circle} from 'react-native-svg';
+import { getDatabase, onValue, ref, set} from "firebase/database";
+import { realTimeDB } from '../../firebaseConfig';
+import { firebase } from '@react-native-firebase/auth';
+
 
 const Dashboard = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -7,11 +12,25 @@ const Dashboard = () => {
   const minThreshold = 20;
   const maxThreshold = 60;
 
+  // Circle-Style
+  const radius = 50;
+  const strokeWidth = 10; 
+  const circumference = 2 * Math.PI * radius;
+  const progress = (humidityPercentage / 100) * circumference;
+
+  // Determined color based on range
+  let color;
+  if (humidityPercentage >= 20 && humidityPercentage <= 60) {
+    color = '#4CAF50'; // Green
+  } else{ (humidityPercentage < 20) 
+    color = '#FF0000'; // Red
+  }
+
   const getHealthStatus = () => {
     if (humidityPercentage >= minThreshold && humidityPercentage <= maxThreshold) {
       return "Your plant feels awesome! 😎 Keep it up.";
     } else {
-      return "Your plant is under the weather. You might want to water it.";
+      return "Your plant is under the weather😓. You might want to water it.";
     }
   };
   const getHealthStatusColor = () => {
@@ -20,10 +39,29 @@ const Dashboard = () => {
 
   const handleButtonPress = () => {
     // Update the time when the button is pressed
-    setCurrentTime(new Date());
-    setHumidityPercentage(Math.floor(Math.random() * 60));
+
+    setCurrentTime(new Date());   
+    isRefreshPressed();
+    writePlantHumidityLevel();
     console.log('Button Pressed!');
+
   };
+
+  function writePlantHumidityLevel(){
+    const db = getDatabase();
+    const humidityLevel = ref(db, '/testSensor/humidityLevel') 
+    onValue(humidityLevel, (snapshot) => {
+      const data = snapshot.val();
+      setHumidityPercentage(data)
+    })
+  }
+
+  function isRefreshPressed(){
+    const db = getDatabase();
+    set(ref(db, 'testSensor/'),{
+      isRefreshPressed: "true"
+    });
+  }
 
   return (
     <View style={styles.container}>
@@ -31,9 +69,33 @@ const Dashboard = () => {
       <Text style={styles.welcomeText}>Hi Bill!</Text>
        {/* First Card */}
        <View style={styles.card}>
-        <Text style={styles.title}>Current Soil Humidity Level</Text>
+          <Text style={styles.title}>Current Soil Humidity Level</Text>
+        <View>
+            <Svg width={2 * radius} height={2 * radius}>
+        {/* Background Circle */}
+        <Circle
+          cx={radius}
+          cy={radius}
+          r={radius - strokeWidth / 2}
+          fill="none"
+          stroke="#ddd"
+          strokeWidth={strokeWidth}
+        />
+        {/* Percentage Circle */}
+        <Circle
+          cx={radius}
+          cy={radius}
+          r={radius - strokeWidth / 2}
+          fill="none"
+          stroke={color} 
+          strokeWidth={strokeWidth}
+          strokeDasharray={`${progress} ${circumference}`}
+        />
+        {/* Percentage Text */}
         <Text style={[styles.humidityText, { color: getHealthStatusColor() }]}>{humidityPercentage}%</Text>
-        <Text style={[styles.healthStatus, { color: getHealthStatusColor() }]}>{getHealthStatus()}</Text>
+          </Svg>
+          </View>
+          <Text style={[styles.healthStatus, { color: getHealthStatusColor() }]}>{getHealthStatus()}</Text>
       </View>
        {/* 2nd Card */}
       <View style={styles.card2}>
@@ -68,7 +130,6 @@ const styles = StyleSheet.create({
     paddingBottom:30,
     backgroundColor: '#fff',
     borderRadius: 8,
-    marginBottom: 16,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
@@ -78,8 +139,9 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start', 
   },
   card2: {
-    marginTop: 150,
-    paddingTop: 200,
+    marginTop: 80,
+    paddingTop: 20,
+    paddingBottom: 40,
     backgroundColor: '#fff',
     borderRadius: 8,
     marginBottom: 10,
@@ -98,9 +160,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   humidityText: {
-    fontSize: 36,
+    fontSize: 32,
     fontWeight: 'bold',
-    marginBottom: 8,
+    textAlign:'center',
+    paddingTop: 27,
   },
   healthStatus: {
     fontSize: 18,
