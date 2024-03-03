@@ -41,10 +41,13 @@ const EditThreshold = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    sevenDay(); // Call sevenDay function when the dataEntries is set
+  }, [dataEntries]);
+
   function sevenDay() {
     setChartData(dataEntries);
     setChartType(true)
-
     console.log("The 7-Day tab was clicked");
   }
   
@@ -56,7 +59,7 @@ const EditThreshold = () => {
   return (
     <View style={styles.container}>
       <Text>This is the Edit Threshold screen where you can se the threshold and get notifications on when it hits! </Text>
-      <TabsProvider>
+      <TabsProvider defaultIndex={0}>
         <Tabs style={styles.tabs}>
           <TabScreen label="7-Day" icon="chart-line" onPress={sevenDay}>
             <View style={styles.chartContainer}>

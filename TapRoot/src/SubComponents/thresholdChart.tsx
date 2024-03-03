@@ -63,7 +63,7 @@ const ThresholdChart = ({ data, isSevenDay }: { data: DataEntry[], isSevenDay: b
           setSelectedPoint({
             date: selectedEntry.date,
             time: lastReading.time,
-            humidity: lastReading.humidity,
+            humidity: parseFloat(lastReading.humidity.toFixed(2)),
           });
         }
       } else {
@@ -72,7 +72,7 @@ const ThresholdChart = ({ data, isSevenDay }: { data: DataEntry[], isSevenDay: b
           setSelectedPoint({
             date: data[0].date,
             time: selectedEntry.time,
-            humidity: selectedEntry.humidity,
+            humidity: parseFloat(selectedEntry.humidity.toFixed(2)),
           });
         }
       }
