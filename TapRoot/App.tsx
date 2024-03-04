@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 // import screens
 import DashboardScreen from './src/Components/Dashboard';
 import ProfileScreen from './src/Components/Profile';
-import PlantInfoScreen from './src/Components/PlantInfo';
+import PlantInfoComponent from './src/Components/PlantInfo';
 import HistoryScreenComponent from './src/Components/History';
 import EditThresholdComponent from './src/Components/EditThreshold';
 
@@ -93,5 +93,15 @@ function ThresholdScreen() {
         <EditThresholdComponent></EditThresholdComponent>
       </ScrollView>
     </SafeAreaView>
+  );
+}
+
+function PlantInfoScreen() {
+  return (
+    // <SafeAreaView style={styles.container}>
+    //   <ScrollView style={styles.scrollView}>
+        <PlantInfoComponent></PlantInfoComponent>
+    //   </ScrollView>
+    // </SafeAreaView>
   );
 }

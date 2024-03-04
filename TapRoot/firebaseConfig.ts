@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { initializeAuth, inMemoryPersistence } from "firebase/auth";
 import { getFirestore} from "firebase/firestore";
+import { getDatabase } from "firebase/database";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -9,6 +10,7 @@ import { getFirestore} from "firebase/firestore";
 const firebaseConfig = {
   apiKey: "AIzaSyBDCv9y-buDbsVEx9Hy4ePuFbsAnIw5-tQ",
   authDomain: "taproot-561bd.firebaseapp.com",
+  databaseURL: "https://taproot-561bd-default-rtdb.firebaseio.com",
   projectId: "taproot-561bd",
   storageBucket: "taproot-561bd.appspot.com",
   messagingSenderId: "708016590340",
@@ -21,3 +23,4 @@ export const FIRESTORE_DB = getFirestore(app);
 export const initAuth = initializeAuth(app,{
   persistence:inMemoryPersistence
 });
+export const realTimeDB = getDatabase(app);

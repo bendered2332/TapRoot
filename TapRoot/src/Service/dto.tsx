@@ -7,7 +7,7 @@ export interface Reading {
 export interface DataEntry {
     date: string;
     readings: Reading[];
-    id: number;
+    id: string;
 }
 // Threshold screen
 export interface ThresholdChartProps {
