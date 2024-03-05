@@ -18,3 +18,7 @@ export interface DbProps {
     data: DataEntry[];
 }
 
+export interface ThresholdLimitProps {
+    data: DataEntry;
+  }
+
