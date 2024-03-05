@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Svg, {Circle} from 'react-native-svg';
 import { getDatabase, onValue, ref, set} from "firebase/database";
 import { realTimeDB } from '../../firebaseConfig';
 import { firebase } from '@react-native-firebase/auth';
-import DataService from '../Service/firestoreService';
 
 
 const Dashboard = () => {
@@ -12,9 +11,6 @@ const Dashboard = () => {
   const [humidityPercentage, setHumidityPercentage] = useState(60);
   const minThreshold = 20;
   const maxThreshold = 60;
-  const documentName = "EntryData";
-  const collectionName = "Data";
-  const dataService = new DataService();
 
   // Circle-Style
   const radius = 50;
@@ -22,16 +18,6 @@ const Dashboard = () => {
   const circumference = 2 * Math.PI * radius;
   const progress = (humidityPercentage / 100) * circumference;
 
-  useEffect(() => {
-    const fetchAllData = async() => {
-      try {
-        const data = await dataService.getAllData(collectionName, documentName);
-        if (data){
-          setDataEntries(data);
-        }
-      }
-    }
-  })
   // Determined color based on range
   let color;
   if (humidityPercentage >= 20 && humidityPercentage <= 60) {
