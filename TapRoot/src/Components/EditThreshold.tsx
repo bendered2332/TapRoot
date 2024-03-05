@@ -4,6 +4,7 @@ import { DataEntry, Reading } from '../Service/dto';
 import DataService from '../Service/firestoreService';
 import ThresholdChart from '../SubComponents/thresholdChart';
 import { TabsProvider, Tabs, TabScreen } from 'react-native-paper-tabs';
+import ThresholdLimit from '../SubComponents/thresholdLimit';
 
 const EditThreshold = () => {
   const [latestDataEntry, setLatestDataEntry] = useState<DataEntry[]>([]);
@@ -13,6 +14,8 @@ const EditThreshold = () => {
   const dataService = new DataService();
   const [CHARTDATA, setChartData] = useState<DataEntry[]>([]);
   const [CHARTTYPE, setChartType] = useState<boolean>(true); // isSvenDay placeholder
+  const [thresholdSetData, setThresholdSetData] = useState<DataEntry | undefined>();
+
   useEffect(() => {
     const fetchAllData = async () => {
       try {
@@ -36,6 +39,7 @@ const EditThreshold = () => {
         if(data) {
           res.push(data);
           setLatestDataEntry(res)
+          setThresholdSetData(res[0]); // set the data as an object to pass onto ThresholdLimit.tsx page
         }
       } catch (error) {
         console.error('Error fetching data on threshholdChart:', error);
@@ -62,19 +66,27 @@ const EditThreshold = () => {
   return (
     <View style={styles.container}>
       <Text>This is the Edit Threshold screen where you can se the threshold and get notifications on when it hits! </Text>
+
+      <View style={styles.thresholdLimit}>
+        {/* render component when thresholdSetData is filled */}
+        {thresholdSetData && <ThresholdLimit data={thresholdSetData} />} 
+      </View>
+      
       <TabsProvider defaultIndex={0}>
         <Tabs style={styles.tabs}>
           <TabScreen label="7-Day" icon="chart-line" onPress={sevenDay}>
-            <View style={styles.chartContainer}>
-            </View>
+            <View></View>
           </TabScreen>
           <TabScreen label="24-Hr" icon="chart-line" onPress={twentyFourHour}>
-            <View style={styles.chartContainer}>
-            </View>
+              <View></View>
           </TabScreen>
         </Tabs>
       </TabsProvider>
-      <ThresholdChart data={CHARTDATA} isSevenDay={CHARTTYPE}/>
+
+      <View style={styles.chartContainer}>
+        <ThresholdChart data={CHARTDATA} isSevenDay={CHARTTYPE}/>
+      </View>
+      
     </View>
   );
 };
@@ -95,6 +107,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#eee',
   },
+  thresholdLimit: {
+    flex: 1,
+    paddingTop: 16,
+    paddingBottom: 16,
+    position: 'relative',
+  }
 })
 
 export default EditThreshold;
