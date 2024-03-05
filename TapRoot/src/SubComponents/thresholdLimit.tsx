@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { TextInput, Button, Modal, Dialog, Portal, ActivityIndicator } from 'react-native-paper';
+import { TextInput, Button, Modal, Dialog, Portal, ActivityIndicator, Snackbar } from 'react-native-paper';
 import { DataEntry, ThresholdLimitProps, Limit } from '../Service/dto';
 import DataService from '../Service/firestoreService';
 
@@ -16,9 +16,17 @@ const ThresholdLimit: React.FC<ThresholdLimitProps> = ({ data }) => {
     const [limit, setLimit] = useState<Limit>();
     const [validationError, setValidationError] = useState<string>("");
     const [submitting, setSubmitting] = useState(false);
+    const [snackbarVisible, setSnackbarVisible] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
 
+    //show dialog and close
     const showDialog = () => setVisible(true);
     const hideDialog = () => setVisible(false);
+    // show snackbar
+    const showSnackbar = (message: string) => {
+        setSnackbarMessage(message);
+        setSnackbarVisible(true);
+    };
     // configure service and db path
     const documentName = "ThresholdLimits";
     const collectionName = "Data";
@@ -49,6 +57,14 @@ const ThresholdLimit: React.FC<ThresholdLimitProps> = ({ data }) => {
     useEffect(() => {
         loadPageData(); // run this function once
     }, []);
+
+    useEffect(() => {
+        // Check if current humidity percentage exceeds the threshold
+        if (currentHumPer && limit && (currentHumPer < limit.min || currentHumPer > limit.max)) {
+            showSnackbar('Humidity is out of your threshold range.');
+        }
+        // will always check when the limit or current humidity is updated
+    }, [currentHumPer, limit]);
 
     function humidityToPercent(rawHumidity : number) {
         var finalHumidity
@@ -112,6 +128,7 @@ const ThresholdLimit: React.FC<ThresholdLimitProps> = ({ data }) => {
     //#endregion
 
   return (
+    
     <View style={styles.container}>
         <Text>Set the Min and Max for your threshold. Also get notified when humidity reaches the value!</Text>
         
@@ -180,7 +197,20 @@ const ThresholdLimit: React.FC<ThresholdLimitProps> = ({ data }) => {
 
         </Dialog>
       </Portal>
-      
+    
+         {/* Snackbar component */}
+         <Snackbar
+                visible={snackbarVisible}
+                onDismiss={() => setSnackbarVisible(false)}
+                style={styles.snackbarPosition}
+                duration={5000} // how long snackbar will be visible
+                action={{
+                    label: 'Dismiss',
+                    onPress: () => setSnackbarVisible(false),
+                }}
+            >
+                {snackbarMessage}
+        </Snackbar>
     </View>
   );
 };
@@ -222,6 +252,10 @@ const styles = StyleSheet.create({
   }, 
   errorText: {
     color: 'red'
+  },
+  snackbarPosition: { // trying to get the snackbar on the top but it isnt working
+    top: 0,
+    bottom: 0 
   }
 });
 
