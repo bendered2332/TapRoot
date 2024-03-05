@@ -1,16 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Svg, {Circle} from 'react-native-svg';
 import { getDatabase, onValue, ref, set} from "firebase/database";
 import { realTimeDB } from '../../firebaseConfig';
 import { firebase } from '@react-native-firebase/auth';
+import { DataEntry } from '../Service/dto';
+import DataService from '../Service/firestoreService';
 
 
 const Dashboard = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [humidityPercentage, setHumidityPercentage] = useState(60);
+  const [latestDataEntry, setLatestDataEntry] = useState<DataEntry>();
+
   const minThreshold = 20;
   const maxThreshold = 60;
+  const onLoadHumidityPercent = null;
+  // firestore get data
+  const documentName = "EntryData";
+  const collectionName = "Data";
+  const dataService = new DataService();
 
   // Circle-Style
   const radius = 50;
@@ -25,6 +34,26 @@ const Dashboard = () => {
   } else{ (humidityPercentage < 20) 
     color = '#FF0000'; // Red
   }
+  // get the latest data for dashboard
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await dataService.getLatestData(collectionName,documentName);
+        let res: DataEntry[] = [] // getting data as an array of objects
+        if(data) {
+          res.push(data);
+          setLatestDataEntry(res[0]) // setting the data as an object and not array
+        }
+      } catch (error) {
+        console.error('Error fetching data on threshholdChart:', error);
+      }
+    };
+    fetchData();
+  }, []);
+  
+  useEffect(() => {
+    setDashboard(); // Call this set dashboard function once latestDataEntry is set
+  }, [latestDataEntry]);
 
   const getHealthStatus = () => {
     if (humidityPercentage >= minThreshold && humidityPercentage <= maxThreshold) {
@@ -47,12 +76,31 @@ const Dashboard = () => {
 
   };
 
+  function setDashboard() {
+    if(latestDataEntry) {
+      const length = latestDataEntry.readings.length
+      const humidity_raw = latestDataEntry.readings[length - 1].humidity;
+      const percentHumidity = parseInt(humidityToPercent(humidity_raw));
+      setHumidityPercentage(percentHumidity);
+    }
+  }
+
+  function humidityToPercent(rawHumidity : number) {
+    var finalHumidity
+    var base = rawHumidity / 1000
+    finalHumidity = base * 100
+    return finalHumidity.toFixed(2);
+  }
+
   function writePlantHumidityLevel(){
     const db = getDatabase();
     const humidityLevel = ref(db, '/testSensor/humidityLevel') 
     onValue(humidityLevel, (snapshot) => {
       const data = snapshot.val();
-      setHumidityPercentage(data)
+      console.log("data: ", data)
+      const percentHumidity = parseInt(humidityToPercent(data)); 
+      console.log("percent humidity: ", percentHumidity);
+      setHumidityPercentage(percentHumidity)
     })
   }
 

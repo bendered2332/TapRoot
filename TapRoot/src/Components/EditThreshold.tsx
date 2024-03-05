@@ -21,7 +21,7 @@ const EditThreshold = () => {
           setDataEntries(data);
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching data on threshholdChart:', error);
       }
     };
 
@@ -30,13 +30,16 @@ const EditThreshold = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await dataService.getLatestData(collectionName,documentName);
-      let res: DataEntry[] = []
-      if(data) {
-        res.push(data);
-        setLatestDataEntry(res)
+      try {
+        const data = await dataService.getLatestData(collectionName,documentName);
+        let res: DataEntry[] = []
+        if(data) {
+          res.push(data);
+          setLatestDataEntry(res)
+        }
+      } catch (error) {
+        console.error('Error fetching data on threshholdChart:', error);
       }
-      
     };
     fetchData();
   }, []);
