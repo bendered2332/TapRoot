@@ -13,6 +13,7 @@ const EditThreshold = () => {
   const dataService = new DataService();
   const [CHARTDATA, setChartData] = useState<DataEntry[]>([]);
   const [CHARTTYPE, setChartType] = useState<boolean>(true); // isSvenDay placeholder
+ 
   useEffect(() => {
     const fetchAllData = async () => {
       try {
