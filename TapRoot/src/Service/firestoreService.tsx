@@ -1,5 +1,5 @@
 import { DataEntry, Limit } from "./dto";
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import 'firebase/firestore';
 import { FIRESTORE_DB } from '../../firebaseConfig';
 
@@ -57,7 +57,7 @@ class FirestoreService {
 
       if (docSnapshot.exists()) {
         const data = docSnapshot.data() as Limit;
-        console.log("Service Class getThresholdLimitsData Document found");
+        console.log("Service Class: getThresholdLimitsData Document found");
         return data
 
       } else {
@@ -70,6 +70,25 @@ class FirestoreService {
     }
   }
 
+
+  // post Data to firestore
+  async postThresholdLimitsData(collectionName: string, documentId: string, data: Limit): Promise<boolean> {
+    if(!data) {
+      console.error("Error: Cannot post null data to Firestore");
+      return false;
+    }
+    // if data is not null then attempt the post
+    try {
+      const docRef = doc(FIRESTORE_DB, collectionName, documentId);
+      await setDoc(docRef, data)
+      console.log("Service Class: postThresholdLimitsData Document posted successfully");
+      return true; // Operation was successful
+
+    } catch (error) {
+      console.error("Error posting document:", error);
+      return false; // Operation failed
+    }
+  }
   //#endregion
 
 }

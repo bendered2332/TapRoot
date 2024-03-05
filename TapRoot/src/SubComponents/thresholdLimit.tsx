@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { TextInput, Button, Modal, Dialog, Portal } from 'react-native-paper';
+import { TextInput, Button, Modal, Dialog, Portal, ActivityIndicator } from 'react-native-paper';
 import { DataEntry, ThresholdLimitProps, Limit } from '../Service/dto';
 import DataService from '../Service/firestoreService';
 
@@ -15,6 +15,7 @@ const ThresholdLimit: React.FC<ThresholdLimitProps> = ({ data }) => {
     const [currentHumPer, setHumPer] = useState<number>();
     const [limit, setLimit] = useState<Limit>();
     const [validationError, setValidationError] = useState<string>("");
+    const [submitting, setSubmitting] = useState(false);
 
     const showDialog = () => setVisible(true);
     const hideDialog = () => setVisible(false);
@@ -54,8 +55,7 @@ const ThresholdLimit: React.FC<ThresholdLimitProps> = ({ data }) => {
         var base = rawHumidity / 1000
         finalHumidity = base * 100
         return finalHumidity.toFixed(2);
-      }
-
+    }
 
     //#region Validate and set inputs 
     const validateAndSetMinInput = (text: string) => {
@@ -73,23 +73,44 @@ const ThresholdLimit: React.FC<ThresholdLimitProps> = ({ data }) => {
 
     //#endregion
     
+    async function postData(min: number, max: number) {
+        const limitData: Limit = {
+            min : min,
+            max: max
+        };
+        const success = await dataService.postThresholdLimitsData(collectionName,documentName,limitData);
+        if(success) {
+            hideDialog();
+            console.log("Limit Data saved successfully to Firestore");
+            setLimit(limitData);
+        } else {
+            console.error("Failed to save limit data to Firestore");
+        }
+        setSubmitting(false);
+    }
+
+    //#region button function
     function save() {
-        if (parseFloat(maxText) <= parseFloat(minText)) {
+        const min = parseFloat(minText);
+        const max = parseFloat(maxText);
+        if (max <= min) {
             setValidationError("Max value must be greater than min value.");
             return;
         } 
 
-        hideDialog();
-        console.log("I will now send this data to the db");
-        console.log("Inputted Min: ", minText);
-        console.log("Inputted Max: ", maxText);
-        console.log("Current Hum: ", currentHumPer);
+        // Post the data to firestore here
+        setSubmitting(true); // a spinner which takes place of ok button when psot call happens
+        postData(min, max)
     }
+
 
     function cancel() {
         setValidationError("");
         hideDialog();
     }
+
+    //#endregion
+
   return (
     <View style={styles.container}>
         <Text>Set the Min and Max for your threshold. Also get notified when humidity reaches the value!</Text>
@@ -134,24 +155,27 @@ const ThresholdLimit: React.FC<ThresholdLimitProps> = ({ data }) => {
           </Dialog.Content>
 
           <Dialog.Actions>
-            <Button 
-                mode="outlined" 
-                style={styles.buttonCancel} 
-                labelStyle={{ color: 'black' }} 
-                onPress={cancel}>
-                Cancel
-            </Button>
-
-            <Button 
-                mode="outlined" 
-            // disable button when one or the other is null and follow disableButtonStyle
-                style={[styles.buttonOk, !minText || !maxText ? styles.disabledButton : null]} 
-                labelStyle={{ color: !minText || !maxText ? '#aaa' : 'black' }} 
-                onPress={save} 
-            // the disabled when inputs are blank the button is disabled.
-                disabled={!minText || !maxText}>
-                OK
-            </Button>
+                {submitting? ( // a submitting spinner. when the post call is happening a spinner will appear
+                    <ActivityIndicator animating={true} color="#42a5f5" />
+                ): (
+                <><Button
+                    mode="outlined"
+                    style={styles.buttonCancel}
+                    labelStyle={{ color: 'black' }}
+                    onPress={cancel}>
+                        Cancel
+                </Button>
+                <Button
+                    mode="outlined"
+                    // disable button when one or the other is null and follow disableButtonStyle
+                    style={[styles.buttonOk, !minText || !maxText ? styles.disabledButton : null]}
+                    labelStyle={{ color: !minText || !maxText ? '#aaa' : 'black' }}
+                    onPress={save}
+                    // the disabled when inputs are blank the button is disabled.
+                    disabled={!minText || !maxText}>
+                        OK
+                </Button></>
+                )}
           </Dialog.Actions>
 
         </Dialog>
