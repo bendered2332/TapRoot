@@ -40,10 +40,13 @@ const ThresholdChart = ({ data, isSevenDay }: { data: DataEntry[], isSevenDay: b
         {
           // past 24 hours chart
           data.forEach((dataEntry) => {
+            var length = dataEntry.readings.length;
             dataEntry.readings.forEach((readingVal, index) =>{
               humidityData.push(readingVal.humidity) // store the humididity data
+              var counter = 0
+              counter = length > 15 ? 4 : 2; // if check for counter
 
-              if (index % 2 === 0) { // get every second, every 2 point
+              if (index % counter === 0) { // get every second, every 2 point
                 dateLabels.push(readingVal.time.substring(0,5)); // get only the hh:mm part
               } else {
                 dateLabels.push(''); // Add an empty string for labels to be skipped
