@@ -9,13 +9,19 @@ const ThresholdLimit: React.FC<ThresholdLimitProps> = ({ data }) => {
     if(!data){
         console.log("Error: There is no children data to the ThresholdLimit Page");
     } 
+    // min and max user input
     const [minText, setMinText] = useState("");
     const [maxText, setMaxText] = useState("");
+    // dialog box
     const [visible, setVisible] = useState(false);
     const [currentHumPer, setHumPer] = useState<number>();
+    // gets the db stored limit
     const [limit, setLimit] = useState<Limit>();
+    // validation checker for min and max input
     const [validationError, setValidationError] = useState<string>("");
+    // submitting spinner when data is posting to firestore
     const [submitting, setSubmitting] = useState(false);
+    // snackbar notification when humidity is outside set range
     const [snackbarVisible, setSnackbarVisible] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
 
@@ -32,13 +38,6 @@ const ThresholdLimit: React.FC<ThresholdLimitProps> = ({ data }) => {
     const collectionName = "Data";
     const dataService = new DataService();
 
-    function loadPageData() {
-        // set the current humidty percentage convert from number to percentage
-        const length = data.readings.length
-        const humidity_raw = data.readings[length - 1].humidity;
-        const percentHumidity = parseInt(humidityToPercent(humidity_raw));
-        setHumPer(percentHumidity);
-    }
     useEffect(() => {
         const getLimitData = async () => {
             try {
@@ -66,6 +65,14 @@ const ThresholdLimit: React.FC<ThresholdLimitProps> = ({ data }) => {
         // will always check when the limit or current humidity is updated
     }, [currentHumPer, limit]);
 
+    function loadPageData() {
+        // set the current humidty percentage convert from number to percentage
+        const length = data.readings.length
+        const humidity_raw = data.readings[length - 1].humidity;
+        const percentHumidity = parseInt(humidityToPercent(humidity_raw));
+        setHumPer(percentHumidity);
+    }
+
     function humidityToPercent(rawHumidity : number) {
         var finalHumidity
         var base = rawHumidity / 1000
@@ -73,7 +80,7 @@ const ThresholdLimit: React.FC<ThresholdLimitProps> = ({ data }) => {
         return finalHumidity.toFixed(2);
     }
 
-    //#region Validate and set inputs 
+    //#region Validate and set min and max inputs 
     const validateAndSetMinInput = (text: string) => {
         const number = parseFloat(text);
         if ((!isNaN(number) && number >= 0 ) || text === "") {
@@ -89,6 +96,7 @@ const ThresholdLimit: React.FC<ThresholdLimitProps> = ({ data }) => {
 
     //#endregion
     
+    // post limit data to firestore
     async function postData(min: number, max: number) {
         const limitData: Limit = {
             min : min,
