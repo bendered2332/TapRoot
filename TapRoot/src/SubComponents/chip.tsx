@@ -1,7 +1,7 @@
 import React, { useState } from 'react'; 
 import { View, StyleSheet,} from 'react-native'; 
 import { Chip } from 'react-native-paper'; 
-  
+
 const Chips = () => { 
     const [selectedChips, setSelectedChips] = useState(Array(8).fill(false));
     
@@ -13,7 +13,10 @@ const Chips = () => {
             return newSelectedChips;
         });
     };
-    
+    const selectAllChips = () => {
+      const allSelected = selectedChips.every(chip => chip);
+      setSelectedChips(selectedChips.map(() => !allSelected));
+    };
       return ( 
         <View style={styles.container}>
           {[...Array(8)].map((_,index) => (
@@ -25,8 +28,18 @@ const Chips = () => {
               >  
                 Date {index + 1}
               </Chip> 
-            </View> 
+            </View>
           ))}
+          <View>
+            <Chip
+              mode = "flat"
+              onPress={selectAllChips}
+              style={styles.selectAllButton}
+              >
+                Select All
+            </Chip>
+
+          </View>
         </View> 
       ); 
     }; 
@@ -40,7 +53,7 @@ const styles = StyleSheet.create({
       flexWrap: 'wrap',
     },
     chip: { 
-      width: 150, 
+      width: 125, 
       marginTop: 10,  
       marginVertical: 10,
       marginHorizontal: 5,
@@ -48,4 +61,8 @@ const styles = StyleSheet.create({
     column: {
         justifyContent: 'center',
       },
+    selectAllButton:{
+      backgroundColor: '#fff',
+    },
+
   });

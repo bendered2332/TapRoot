@@ -37,14 +37,7 @@ export default function History(){
 
   return (
     <View style={styles.container}>
-      {historyList.map(history =>{
-        return (
-          <View>
-             <Text key={history.id}>{history.value}</Text>
-          <Chips/> 
-        </View>
-        )
-      })}
+      <Chips></Chips>
       <HistoryTable></HistoryTable>
     </View>
     );
