@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, Button, StyleSheet, } from 'react-native';
 import HistoryTable from '../SubComponents/historyTable';
 import { FIRESTORE_DB } from '../../firebaseConfig';
-import { QuerySnapshot, collection, getDocs, query } from 'firebase/firestore';
+import { QuerySnapshot, collection, deleteDoc, doc, getDocs, query } from 'firebase/firestore';
+import Chips from '../SubComponents/chip';
 
 type HistoryTypeItem ={
   value: string;
@@ -36,16 +37,25 @@ export default function History(){
 
   return (
     <View style={styles.container}>
-      {historyList.map(history =>{
-        return (
-          <Text key={history.id}>{history.value}</Text>
-        )
-      })}
+      <Chips></Chips>
       <HistoryTable></HistoryTable>
-
     </View>
-  );
-};
+    );
+  }
+  
+  // return (
+  //   <View style={styles.container}>
+  //     {historyList.map(history =>{
+  //       return (
+  //         <View>
+  //            <Text key={history.id}>{history.value}</Text>
+  //       </View>
+  //       )
+  //     })}
+  //     <HistoryTable></HistoryTable>
+  //   </View>
+  //   );
+  // }
 
 const styles = StyleSheet.create({
   container: {
@@ -55,6 +65,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#5DB075',
     justifyContent: 'center',
     alignItems: "flex-start",
-  }
+  },
+  chip: {
+    margin: 6, 
+    width: '45%',
+  },
 });
+
 
