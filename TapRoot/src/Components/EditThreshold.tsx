@@ -55,13 +55,11 @@ const EditThreshold = () => {
   function sevenDay() {
     setChartData(dataEntries);
     setChartType(true)
-    console.log("The 7-Day tab was clicked");
   }
   
   function twentyFourHour() {
     setChartData(latestDataEntry);
     setChartType(false)
-    console.log("The 24 Hr tab was clicked")
   }
   return (
     <View style={styles.container}>
