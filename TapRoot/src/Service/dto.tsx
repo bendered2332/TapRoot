@@ -18,3 +18,11 @@ export interface DbProps {
     data: DataEntry[];
 }
 
+export interface ThresholdLimitProps {
+    data: DataEntry;
+}
+export interface Limit {
+    min: number;
+    max: number;
+}
+

@@ -1,9 +1,10 @@
-import { DataEntry } from "./dto";
-import { doc, getDoc } from 'firebase/firestore';
+import { DataEntry, Limit } from "./dto";
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import 'firebase/firestore';
 import { FIRESTORE_DB } from '../../firebaseConfig';
 
 class FirestoreService {
+  //#region Fetch Data from Entry Data
   // fetch data from Firestore collection and document
   async getAllData(collectionName: string, documentId: string): Promise<DataEntry[] | null> {
     try {
@@ -46,6 +47,50 @@ class FirestoreService {
       throw error;
     }
   }
+  //#endregion
+  //#region Get and Post data from ThresholdLimits
+  // Get Data
+  async getThresholdLimitsData(collectionName: string, documentId: string): Promise<Limit | null> {
+    try {
+      const docRef = doc(FIRESTORE_DB, collectionName, documentId);
+      const docSnapshot = await getDoc(docRef);
+
+      if (docSnapshot.exists()) {
+        const data = docSnapshot.data() as Limit;
+        console.log("Service Class: getThresholdLimitsData Document found");
+        return data
+
+      } else {
+        console.log("Document not found");
+        return null;
+      }
+    } catch (error) {
+      console.error("Error fetching document:", error);
+      throw error;
+    }
+  }
+
+
+  // post Data to firestore
+  async postThresholdLimitsData(collectionName: string, documentId: string, data: Limit): Promise<boolean> {
+    if(!data) {
+      console.error("Error: Cannot post null data to Firestore");
+      return false;
+    }
+    // if data is not null then attempt the post
+    try {
+      const docRef = doc(FIRESTORE_DB, collectionName, documentId);
+      await setDoc(docRef, data)
+      console.log("Service Class: postThresholdLimitsData Document posted successfully");
+      return true; // Operation was successful
+
+    } catch (error) {
+      console.error("Error posting document:", error);
+      return false; // Operation failed
+    }
+  }
+  //#endregion
+
 }
 
 export default FirestoreService;
