@@ -26,3 +26,11 @@ export interface Limit {
     max: number;
 }
 
+export interface ChipsProps {
+    data: HistoryChip[];
+    onSelectedChipsChange: (selectedChips: string[]) => void;
+}
+export interface HistoryChip {
+    date: string;
+    id: string;
+}
