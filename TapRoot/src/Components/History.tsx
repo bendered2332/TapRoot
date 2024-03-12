@@ -1,62 +1,76 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Button, StyleSheet, } from 'react-native';
-import HistoryTable from '../SubComponents/historyTable';
-import { FIRESTORE_DB } from '../../firebaseConfig';
-import { QuerySnapshot, collection, deleteDoc, doc, getDocs, query } from 'firebase/firestore';
-import Chips from '../SubComponents/chip';
+import DataService from '../Service/firestoreService';
 
-type HistoryTypeItem ={
-  value: string;
-  id: string;
-}
+import Chips from '../SubComponents/chip';
+import { DataEntry, HistoryChip } from '../Service/dto';
+import HistoryTable from '../SubComponents/historyTable';
 
 
 export default function History(){
+  // stores all data from firestore
+  const [dataEntries, setDataEntries] = useState<DataEntry[]>([]);
+  // data for chips page
+  const [allDates, setAllDates] = useState<HistoryChip[]>([]);
+  //output data from the chips page selected chips and their ID
+  const [selectedChips, setSelectedChips] = useState<string[]>([]);
+  const [selectedChipsData, setSelectedChipsData] = useState<DataEntry[]>([]);
 
-  const [historyList, setHistoryList] = useState(new Array<HistoryTypeItem>());
+  // data Service imports
+  const documentName = "EntryData";
+  const collectionName = "Data";
+  const dataService = new DataService();
 
-  function getHistoryList(){
-    const historyRef = collection(FIRESTORE_DB, "History");
-  
-  
-    getDocs(query(historyRef)).then(
-      (querySnapshot: QuerySnapshot) => {
-        const data = querySnapshot.docs.map(
-          (doc) => {
-            return ({value: doc.data().value, id: doc.data().id } as HistoryTypeItem);
-          }
-        );
-        setHistoryList(data)
-      }
-    )
-  }
-
+  // get data
   useEffect(() => {
-    getHistoryList();
-  }); 
+    const fetchAllData = async () => {
+      try {
+        const data = await dataService.getAllData(collectionName, documentName);
+        if (data) {
+          setDataEntries(data);
+          // set the data for the chips component
+          const historyChips: HistoryChip[] = data.map(entry => ({
+            date: entry.date,
+            id: entry.id
+          }));
+          setAllDates(historyChips);
+        }
+      } catch (error) {
+        console.error('Error fetching data on threshholdChart:', error);
+      }
+    };
+
+    fetchAllData();
+  }, []);
+
+  // the output function for chips component
+  const handleSelectedChipsChange = (chips: string[]) => {
+    setSelectedChips(chips);
+  };
+
+  // Call the function whenever selectedChips change
+  useEffect(() => {
+    updateSelectedDataEntries();
+  }, [selectedChips]);
+
+  // update function to update data passed into history table depending on selected chips
+  function updateSelectedDataEntries() {
+    const newDataEntries = dataEntries.filter((entry) =>
+      selectedChips.includes(entry.id)
+    );
+    setSelectedChipsData(newDataEntries);
+  }
 
   return (
     <View style={styles.container}>
-      <Chips></Chips>
-      <HistoryTable></HistoryTable>
+      
+       {// render domponent only when data is filled
+       allDates && <Chips data={allDates} onSelectedChipsChange={handleSelectedChipsChange}/>} 
+      <HistoryTable data={selectedChipsData} />
     </View>
     );
   }
   
-  // return (
-  //   <View style={styles.container}>
-  //     {historyList.map(history =>{
-  //       return (
-  //         <View>
-  //            <Text key={history.id}>{history.value}</Text>
-  //       </View>
-  //       )
-  //     })}
-  //     <HistoryTable></HistoryTable>
-  //   </View>
-  //   );
-  // }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
