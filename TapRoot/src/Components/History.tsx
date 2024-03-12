@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Button, StyleSheet, } from 'react-native';
-import HistoryTable from '../SubComponents/historyTable';
 import DataService from '../Service/firestoreService';
 
 import Chips from '../SubComponents/chip';
 import { DataEntry, HistoryChip } from '../Service/dto';
-import NewHistoryTable from '../SubComponents/newHistoryTale';
+import HistoryTable from '../SubComponents/historyTable';
 
 
 export default function History(){
@@ -67,7 +66,7 @@ export default function History(){
       
        {// render domponent only when data is filled
        allDates && <Chips data={allDates} onSelectedChipsChange={handleSelectedChipsChange}/>} 
-      <NewHistoryTable data={selectedChipsData} />
+      <HistoryTable data={selectedChipsData} />
     </View>
     );
   }

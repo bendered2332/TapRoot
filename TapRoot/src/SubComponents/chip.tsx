@@ -2,9 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Chip } from 'react-native-paper';
 import { ChipsProps } from '../Service/dto';
+import { ActivityIndicator, MD2Colors } from 'react-native-paper';
 
 
 const Chips: React.FC<ChipsProps> = ({ data, onSelectedChipsChange }) => {
+  if (!data || data.length === 0) {
+    return <ActivityIndicator animating={true} color={MD2Colors.purple600} />
+  }
   const [selectedChips, setSelectedChips] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState<boolean>(false);
 
@@ -27,7 +31,7 @@ const Chips: React.FC<ChipsProps> = ({ data, onSelectedChipsChange }) => {
     if (selectAll) {
       setSelectedChips([]);
     } else {
-      const allChipIds = data.map((chip) => chip.id);
+      const allChipIds = data.map((chip) => chip.id); // get all the ID's for the chips
       setSelectedChips(allChipIds);
     }
     setSelectAll((prevSelectAll) => !prevSelectAll);
