@@ -5,6 +5,7 @@ import DataService from '../Service/firestoreService';
 
 import Chips from '../SubComponents/chip';
 import { DataEntry, HistoryChip } from '../Service/dto';
+import NewHistoryTable from '../SubComponents/newHistoryTale';
 
 
 export default function History(){
@@ -14,14 +15,7 @@ export default function History(){
   const [allDates, setAllDates] = useState<HistoryChip[]>([]);
   //output data from the chips page selected chips and their ID
   const [selectedChips, setSelectedChips] = useState<string[]>([]);
-
-  const handleSelectedChipsChange = (chips: string[]) => {
-    setSelectedChips(chips);
-    // selectedChips.forEach( chip => {
-    //   dataEntries.map
-    // })
-    console.log("Parent component selected Chips: ", selectedChips);
-  };
+  const [selectedChipsData, setSelectedChipsData] = useState<DataEntry[]>([]);
 
   // data Service imports
   const documentName = "EntryData";
@@ -50,13 +44,30 @@ export default function History(){
     fetchAllData();
   }, []);
 
+  // the output function for chips component
+  const handleSelectedChipsChange = (chips: string[]) => {
+    setSelectedChips(chips);
+  };
+
+  // Call the function whenever selectedChips change
+  useEffect(() => {
+    updateSelectedDataEntries();
+  }, [selectedChips]);
+
+  // update function to update data passed into history table depending on selected chips
+  function updateSelectedDataEntries() {
+    const newDataEntries = dataEntries.filter((entry) =>
+      selectedChips.includes(entry.id)
+    );
+    setSelectedChipsData(newDataEntries);
+  }
+
   return (
     <View style={styles.container}>
       
        {// render domponent only when data is filled
        allDates && <Chips data={allDates} onSelectedChipsChange={handleSelectedChipsChange}/>} 
-      
-      <HistoryTable></HistoryTable>
+      <NewHistoryTable data={selectedChipsData} />
     </View>
     );
   }
