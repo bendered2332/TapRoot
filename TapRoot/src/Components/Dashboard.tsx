@@ -4,7 +4,7 @@ import Svg, {Circle} from 'react-native-svg';
 import { getDatabase, onValue, ref, set} from "firebase/database";
 import { realTimeDB } from '../../firebaseConfig';
 import { firebase } from '@react-native-firebase/auth';
-import { DataEntry } from '../Service/dto';
+import { DataEntry, Limit } from '../Service/dto';
 import DataService from '../Service/firestoreService';
 
 
@@ -12,9 +12,10 @@ const Dashboard = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [humidityPercentage, setHumidityPercentage] = useState(60);
   const [latestDataEntry, setLatestDataEntry] = useState<DataEntry>();
+  const [limit, setLimit] = useState<Limit>();
+  const [minThreshold, setMinThreshold] = useState<number>();
+  const [maxThreshold, setMaxThreshold] = useState<number>();
 
-  const minThreshold = 20;
-  const maxThreshold = 60;
   const onLoadHumidityPercent = null;
   // firestore get data
   const documentName = "EntryData";
@@ -34,6 +35,23 @@ const Dashboard = () => {
   } else{ (humidityPercentage < 20) 
     color = '#FF0000'; // Red
   }
+  // get limit data
+  useEffect(() => {
+    const getLimitData = async () => {
+        try {
+            const data = await dataService.getThresholdLimitsData("Data", "ThresholdLimits");
+            if (data) {
+                setLimit(data);
+                setMinThreshold(data.min)
+                setMaxThreshold(data.max)
+            }
+        } catch (error) {
+            console.error('Error fetching data on ThresholdLimit.tsx:', error);
+        }
+    };
+
+    getLimitData();
+}, []);
   // get the latest data for dashboard
   useEffect(() => {
     const fetchData = async () => {
@@ -56,14 +74,22 @@ const Dashboard = () => {
   }, [latestDataEntry]);
 
   const getHealthStatus = () => {
-    if (humidityPercentage >= minThreshold && humidityPercentage <= maxThreshold) {
-      return "Your plant feels awesome! 😎 Keep it up.";
+    if (minThreshold !== undefined && maxThreshold !== undefined) {
+      if (humidityPercentage >= minThreshold && humidityPercentage <= maxThreshold) {
+        return "Your plant feels awesome! 😎 Keep it up.";
+      } else {
+        return "Your plant is under the weather😓. You might want to water it.";
+      }
     } else {
-      return "Your plant is under the weather😓. You might want to water it.";
+      // where thresholds are undefined
+      return "Thresholds not available.";
     }
   };
   const getHealthStatusColor = () => {
-    return (humidityPercentage >= minThreshold && humidityPercentage <= maxThreshold) ? '#4CAF50' : '#FF0000';
+    const defaultColor = '#000'; // default color if thresholds are undefined
+    return (minThreshold !== undefined && maxThreshold !== undefined) ? 
+      ((humidityPercentage >= minThreshold && humidityPercentage <= maxThreshold) ? '#4CAF50' : '#FF0000') :
+      defaultColor;
   };
 
   const handleButtonPress = () => {
@@ -147,7 +173,10 @@ const Dashboard = () => {
       </View>
        {/* 2nd Card */}
       <View style={styles.card2}>
-        <Text style={styles.title2}>Recommended humidity levels</Text>
+        <Text style={styles.title2}>Min Threshold: {minThreshold}%</Text>
+      </View>
+      <View style={styles.card3}>
+        <Text style={styles.title2}>Max Threshold: {maxThreshold}%</Text>
       </View>
       {/* Refresh button */}
       <Text style={styles.timeText}>Last refresh at: {currentTime.toLocaleTimeString()}</Text>
@@ -188,6 +217,20 @@ const styles = StyleSheet.create({
   },
   card2: {
     marginTop: 80,
+    paddingTop: 20,
+    paddingBottom: 40,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    marginBottom: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5,
+    alignItems: 'center',
+    justifyContent: 'flex-start', 
+  },
+  card3: {
     paddingTop: 20,
     paddingBottom: 40,
     backgroundColor: '#fff',
