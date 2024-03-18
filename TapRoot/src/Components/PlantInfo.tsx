@@ -33,9 +33,9 @@ const PlantInfoComponent: React.FC = () => {
 }, [search]);
 
 const handleSelectPlant = (plant: Plant) => {
-  setSelectedPlant(plant);
-  setSearch(plant.common_name);
+  //setSearch(plant.common_name);
   setShowDropdown(false);
+  setSelectedPlant(plant);
 };
 
 const handleSearchbarClick = () => {
