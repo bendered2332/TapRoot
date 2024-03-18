@@ -27,6 +27,7 @@ function MyTabs() {
   return (
     <Tab.Navigator> 
     <Tab.Screen name="Dashboard" options={{
+          unmountOnBlur: true,
           tabBarLabel: 'Dashboard',
           tabBarIcon: ({ color, size }) => {
             return <Icon name="home" size={size} color={color} />;
@@ -34,6 +35,7 @@ function MyTabs() {
         }} component={DashboardScreen}/>
 
     <Tab.Screen name="Plant Info" options={{
+          unmountOnBlur: true,
           tabBarLabel: 'Plant Info',
           tabBarIcon: ({ color, size }) => {
             return <Icon name="tree" size={size} color={color} />
@@ -41,6 +43,7 @@ function MyTabs() {
         }} component={PlantInfoScreen}/>   
 
     <Tab.Screen name="Threshold" options={{
+          unmountOnBlur: true,
           tabBarLabel: 'Threshold',
           tabBarIcon: ({ color, size }) => {
             return <Icon name="chart-line" size={size} color={color} />
@@ -48,6 +51,7 @@ function MyTabs() {
         }} component={ThresholdScreen}/>
 
     <Tab.Screen name="History" options={{
+          unmountOnBlur: true,
           tabBarLabel: 'History',
           tabBarIcon: ({ color, size }) => {
             return <Icon name="table-clock" size={size} color={color}/>;

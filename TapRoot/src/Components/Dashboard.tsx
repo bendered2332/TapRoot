@@ -78,7 +78,12 @@ const Dashboard = () => {
       if (humidityPercentage >= minThreshold && humidityPercentage <= maxThreshold) {
         return "Your plant feels awesome! 😎 Keep it up.";
       } else {
-        return "Your plant is under the weather😓. You might want to water it.";
+        if(humidityPercentage < minThreshold) {
+          return "You may have to start watering your plants!"
+        } 
+        if( humidityPercentage > maxThreshold) {
+          return "You have watered your plants too much!"
+        }
       }
     } else {
       // where thresholds are undefined
