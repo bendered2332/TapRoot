@@ -86,7 +86,9 @@ const styles = StyleSheet.create({
   },
   selectAllButton: {
     backgroundColor: '#fff',
+    marginHorizontal: 30,
+    margin: 10,
   },
-});
+})
 
 

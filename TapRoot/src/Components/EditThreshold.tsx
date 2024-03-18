@@ -93,9 +93,10 @@ const EditThreshold = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 30,
     position: 'relative',
     backgroundColor: '#5DB075',
+    
   },
     chartContainer: {
     flex: 1,

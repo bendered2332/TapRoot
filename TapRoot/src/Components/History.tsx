@@ -15,7 +15,7 @@ export default function History(){
   //output data from the chips page selected chips and their ID
   const [selectedChips, setSelectedChips] = useState<string[]>([]);
   const [selectedChipsData, setSelectedChipsData] = useState<DataEntry[]>([]);
-
+  
   // data Service imports
   const documentName = "EntryData";
   const collectionName = "Data";

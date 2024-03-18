@@ -25,7 +25,14 @@ export interface Limit {
     min: number;
     max: number;
 }
-
+export interface Plant {
+    id: number;
+    common_name: string;
+    watering:string;
+    default_image: {
+      original_url:string
+    } | null;
+}
 export interface ChipsProps {
     data: HistoryChip[];
     onSelectedChipsChange: (selectedChips: string[]) => void;

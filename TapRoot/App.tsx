@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
   },
   scrollView: {
-    marginHorizontal: 20,
+    marginHorizontal: 0,
   }
 });
 

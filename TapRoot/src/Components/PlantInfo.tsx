@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View, StyleSheet, TouchableOpacity, Text, Image } from 'react-native';
 import { Searchbar } from 'react-native-paper';
-import {Plant} from '../SubComponents/plant';
+import {Plant} from '../Service/dto';
 import mockData from '../mockData/PlantAPI-Data.json';
 import { Dimensions } from 'react-native';
 const { width, height } = Dimensions.get('window');

@@ -150,13 +150,14 @@ const ThresholdLimit: React.FC<ThresholdLimitProps> = ({ data }) => {
             <TextInput label="Set Min" 
             keyboardType="numeric"
             value={minText} 
-            onChangeText={text => validateAndSetMinInput(text)}  />
+            onChangeText={text => validateAndSetMinInput(text)} 
+            style={{ fontSize: 16, color: '#333', margin: 5 }}  />
 
             <TextInput label="Set Max" 
             keyboardType="numeric" 
             value={maxText} 
-            onChangeText={text => validateAndSetMaxInput(text, 100)}  />
-
+            onChangeText={text => validateAndSetMaxInput(text, 100)}
+            style={{ fontSize: 16, color: '#333', margin: 5 }}  />
             <Button icon="send" mode="contained" onPress={showDialog}>
                 Submit
             </Button>
