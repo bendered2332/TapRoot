@@ -1,5 +1,3 @@
-import OpenAI from 'openai';
-
 class OpenAIService {
 	private ENDPOINT: string = 'https://api.openai.com/v1/chat/completions';
     private apikey: string = "--------------------------------";
