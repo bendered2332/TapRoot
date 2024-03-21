@@ -10,7 +10,7 @@ import ProfileScreen from './src/Components/Profile';
 import PlantInfoComponent from './src/Components/PlantInfo';
 import HistoryScreenComponent from './src/Components/History';
 import EditThresholdComponent from './src/Components/EditThreshold';
-
+import OpenAI from './src/Components/OpenAI';
 export default function App() {
   return (
     <PaperProvider>
@@ -40,7 +40,14 @@ function MyTabs() {
           tabBarIcon: ({ color, size }) => {
             return <Icon name="tree" size={size} color={color} />
           },
-        }} component={PlantInfoScreen}/>   
+        }} component={PlantInfoScreen}/>  
+
+    <Tab.Screen name="OpenAI" options={{
+          tabBarLabel: 'OpenAI',
+          tabBarIcon: ({ color, size }) => {
+            return <Icon name="brain" size={size} color={color} />; 
+          },
+        }} component={OpenAIScreen} /> 
 
     <Tab.Screen name="Threshold" options={{
           unmountOnBlur: true,
@@ -64,8 +71,9 @@ function MyTabs() {
             return <Icon name="face-man-profile" size={size} color={color}/>;
           },
         }} component={ProfileScreen} />
-
-      </Tab.Navigator>
+        {/* New screen for OpenAI */}
+    
+    </Tab.Navigator>      
   );
 }
 const styles = StyleSheet.create({
@@ -80,6 +88,15 @@ const styles = StyleSheet.create({
   }
 });
 
+function OpenAIScreen() {
+  return (
+    <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.scrollView}>
+        <OpenAI></OpenAI>
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
 function HistoryScreen() {
   return (
     <SafeAreaView style={styles.container}>
