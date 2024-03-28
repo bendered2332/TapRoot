@@ -4,6 +4,7 @@ import { Searchbar } from 'react-native-paper';
 import {Plant} from '../Service/dto';
 import mockData from '../mockData/PlantAPI-Data.json';
 import { Dimensions } from 'react-native';
+import OpenAIService from "../Service/openAIService";
 const { width, height } = Dimensions.get('window');
 
 const PlantInfoComponent: React.FC = () => {
@@ -11,6 +12,10 @@ const PlantInfoComponent: React.FC = () => {
   const [searchResults, setSearchResults] = useState<Plant[]>([]);
   const [selectedPlant, setSelectedPlant] = useState<Plant | null>(null);
   const [showDropdown, setShowDropdown] = useState(false);
+  // for openAI plant details
+  const [response, setResponse] = useState(""); 
+  const [isLoading, setIsLoading] = useState(false);
+  const openaiService = new OpenAIService();
 
   useEffect(() => {
     //Filters mockData to include plant attributes
@@ -36,6 +41,7 @@ const handleSelectPlant = (plant: Plant) => {
   //setSearch(plant.common_name);
   setShowDropdown(false);
   setSelectedPlant(plant);
+  getOpenAIData(plant.common_name);
 };
 
 const handleSearchbarClick = () => {
@@ -46,6 +52,22 @@ const handleSearchChange = (text: string) => {
   setSearch(text);
   setShowDropdown(true);
 };
+
+  async function getOpenAIData(plantName: string) {
+    setIsLoading(true);
+    try {
+      let prompt = `Can you give me basic care for a/an ${plantName} plant? (keep it short, concise and bulleted)`
+      const response = await openaiService.chatResponse(prompt)
+      if (response) {
+        setResponse(response)
+      }
+    } catch (error) {
+      setResponse("An error occurred while processing your request");
+
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   return (
     <ScrollView style={styles.scrollView}>
@@ -73,9 +95,14 @@ const handleSearchChange = (text: string) => {
         </View>
         {selectedPlant && selectedPlant.default_image && (
         <View style={styles.resultContainer}>
-        <Text style={styles.selectedPlant}>Selected Plant: {selectedPlant.common_name}</Text>
+        <Text style={styles.selectedPlant}>{selectedPlant.common_name}</Text>
         <Image source={{ uri: selectedPlant.default_image.original_url }} style={styles.plantImage} />
-        <Text style={styles.wateringStyle}>Watering: {selectedPlant.watering}</Text>
+        {isLoading ? (
+          <Text>Loading {selectedPlant.common_name} Details...</Text>
+        ) : (
+          <Text style={styles.wateringStyle}>{response}</Text>
+        )}
+        
       </View>
       )}
       </View>
@@ -138,3 +165,5 @@ const styles = StyleSheet.create({
 });
 
 export default PlantInfoComponent;
+
+

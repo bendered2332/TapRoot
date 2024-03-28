@@ -1,6 +1,6 @@
 class OpenAIService {
 	private ENDPOINT: string = 'https://api.openai.com/v1/chat/completions';
-    private apikey: string = "--------------------------------";
+    private apikey = process.env.OPENAI_API_KEY;
 	async chatResponse(prompt: string): Promise<string> { 
 		try {
 
