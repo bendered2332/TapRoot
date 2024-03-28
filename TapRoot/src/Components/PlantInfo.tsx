@@ -86,8 +86,7 @@ const handleSearchChange = (text: string) => {
                   key={plant.id}
                   style={styles.dropdownItem}
                   onPress={() => handleSelectPlant(plant)}
-                >
-                  <Text>{plant.common_name}</Text>
+                ><Text>{plant.common_name.charAt(0).toUpperCase() + plant.common_name.slice(1)}</Text>
                 </TouchableOpacity>
               ))}
             </View>
@@ -95,10 +94,14 @@ const handleSearchChange = (text: string) => {
         </View>
         {selectedPlant && selectedPlant.default_image && (
         <View style={styles.resultContainer}>
-        <Text style={styles.selectedPlant}>{selectedPlant.common_name}</Text>
+          <Text style={styles.selectedPlant}>
+            {selectedPlant &&
+              selectedPlant.common_name.charAt(0).toUpperCase() +
+                selectedPlant.common_name.slice(1)}
+          </Text>
         <Image source={{ uri: selectedPlant.default_image.original_url }} style={styles.plantImage} />
         {isLoading ? (
-          <Text>Loading {selectedPlant.common_name} Details...</Text>
+          <Text style={{ fontSize: 16, fontWeight: 'bold',}}>Loading {selectedPlant.common_name} Details...</Text>
         ) : (
           <Text style={styles.wateringStyle}>{response}</Text>
         )}
