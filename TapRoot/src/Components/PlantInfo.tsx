@@ -70,7 +70,6 @@ const handleSearchChange = (text: string) => {
   }
 
   return (
-    <ScrollView style={styles.scrollView}>
       <View style={styles.container}>
         <View style={styles.searchContainer}>
           <Searchbar
@@ -109,15 +108,10 @@ const handleSearchChange = (text: string) => {
       </View>
       )}
       </View>
-    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  scrollView: {
-    flex: 1,
-    backgroundColor: '#5DB075',
-  },
   container: {
     flex: 1,
     padding: 16,

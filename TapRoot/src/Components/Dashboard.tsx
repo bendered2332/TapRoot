@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
     position:'absolute'
   },
   refreshButton: {
-    backgroundColor: '#DBB92D',
+    backgroundColor: '#FFFF00',
     padding: 12,
     borderRadius: 8,
     position: 'absolute',

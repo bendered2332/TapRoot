@@ -74,11 +74,8 @@ export default function History(){
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
     position: 'relative',
     backgroundColor: '#5DB075',
-    justifyContent: 'center',
-    alignItems: "flex-start",
   },
   chip: {
     margin: 6, 

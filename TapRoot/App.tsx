@@ -73,10 +73,10 @@ const styles = StyleSheet.create({
     flex: 1,
     //paddingTop: StatusBar.currentHeight,
     justifyContent: 'center',
-    alignItems: "flex-start",
   },
   scrollView: {
     marginHorizontal: 0,
+    backgroundColor: '#5DB075',
   }
 });
 
@@ -102,10 +102,10 @@ function ThresholdScreen() {
 
 function PlantInfoScreen() {
   return (
-    // <SafeAreaView style={styles.container}>
-    //   <ScrollView style={styles.scrollView}>
+    <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.scrollView}>
         <PlantInfoComponent></PlantInfoComponent>
-    //   </ScrollView>
-    // </SafeAreaView>
+      </ScrollView>
+    </SafeAreaView>
   );
 }

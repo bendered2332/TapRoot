@@ -1,4 +1,4 @@
-import { View, Text, Button, StyleSheet} from 'react-native';
+import { View, Text, Button, StyleSheet,} from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { DataEntry, Reading } from '../Service/dto';
 import DataService from '../Service/firestoreService';
@@ -15,7 +15,7 @@ const EditThreshold = () => {
   const [CHARTDATA, setChartData] = useState<DataEntry[]>([]);
   const [CHARTTYPE, setChartType] = useState<boolean>(true); // isSvenDay placeholder
   const [thresholdSetData, setThresholdSetData] = useState<DataEntry | undefined>();
-
+  
   useEffect(() => {
     const fetchAllData = async () => {
       try {
@@ -63,8 +63,6 @@ const EditThreshold = () => {
   }
   return (
     <View style={styles.container}>
-      <Text>This is the Edit Threshold screen where you can se the threshold and get notifications on when it hits! </Text>
-
       <View style={styles.thresholdLimit}>
         {/* render component when thresholdSetData is filled */}
         {thresholdSetData && <ThresholdLimit data={thresholdSetData} />} 
@@ -84,8 +82,7 @@ const EditThreshold = () => {
       <View style={styles.chartContainer}>
         <ThresholdChart data={CHARTDATA} isSevenDay={CHARTTYPE}/>
       </View>
-      
-    </View>
+      </View>
   );
 };
 
@@ -93,14 +90,14 @@ const EditThreshold = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 30,
     position: 'relative',
     backgroundColor: '#5DB075',
-    
   },
     chartContainer: {
     flex: 1,
+    paddingTop: 10,
     position: 'relative',
+    alignItems: 'center',
   },
   tabs: {
     flex: 1,
@@ -108,9 +105,8 @@ const styles = StyleSheet.create({
   },
   thresholdLimit: {
     flex: 1,
-    paddingTop: 16,
-    paddingBottom: 16,
     position: 'relative',
+    alignItems: 'center',
   }
 })
 

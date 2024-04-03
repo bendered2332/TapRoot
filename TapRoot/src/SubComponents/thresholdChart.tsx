@@ -98,8 +98,8 @@ const ThresholdChart = ({ data, isSevenDay }: { data: DataEntry[], isSevenDay: b
         <Text style={styles.chartTitle}>Humidity Chart</Text>
         <LineChart
           data={chartData}
-          width={300}
-          height={200}
+          width={380}
+          height={250}
           yAxisSuffix="%"
           yAxisInterval={1}
           chartConfig={{
@@ -131,7 +131,7 @@ const ThresholdChart = ({ data, isSevenDay }: { data: DataEntry[], isSevenDay: b
       // Add container styles if needed
     },
     chartTitle: {
-      fontSize: 18,
+      fontSize: 25,
       fontWeight: 'bold',
       marginBottom: 10,
     },

@@ -136,13 +136,12 @@ const ThresholdLimit: React.FC<ThresholdLimitProps> = ({ data }) => {
     //#endregion
 
   return (
-    
     <View style={styles.container}>
-        <Text>Set the Min and Max for your threshold. Also get notified when humidity reaches the value!</Text>
+        <Text style={{ fontSize: 15, fontWeight: 'bold',}}>Set the Min and Max for your threshold. Also get notified when humidity reaches the value!</Text>
         
         <View style={styles.limitText}>
-            <Text>Current Set Min: {limit?.min}</Text>
-            <Text>Current Set Max: {limit?.max}</Text>
+            <Text style={styles.minText}>Current Set Min: {limit?.min}</Text>
+            <Text style={styles.maxText}>Current Set Max: {limit?.max}</Text>
         </View>
         
 
@@ -158,7 +157,12 @@ const ThresholdLimit: React.FC<ThresholdLimitProps> = ({ data }) => {
             value={maxText} 
             onChangeText={text => validateAndSetMaxInput(text, 100)}
             style={{ fontSize: 16, color: '#333', margin: 5 }}  />
-            <Button icon="send" mode="contained" onPress={showDialog}>
+            <Button 
+                style={{ backgroundColor: '#FFFF00',}}
+                labelStyle={{ color: 'black', fontWeight: 'bold' }}
+                icon="send" 
+                mode="contained" 
+                onPress={showDialog}>
                 Submit
             </Button>
         </View>
@@ -230,12 +234,21 @@ const styles = StyleSheet.create({
     position: 'relative',
     justifyContent: 'center',
     alignItems: 'flex-start',
+    padding: 15,
   },
   thresholdInputs: {
     flex: 1,
     paddingTop: 16,
     paddingBottom: 16,
     position: 'relative',
+  },
+  minText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  maxText: {
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   dialogTitle: {
     fontSize: 20,
@@ -263,7 +276,7 @@ const styles = StyleSheet.create({
     color: 'red'
   },
   snackbarPosition: { // trying to get the snackbar on the top but it isnt working
-    top: 0,
+    top: 0, 
     bottom: 0 
   }
 });
