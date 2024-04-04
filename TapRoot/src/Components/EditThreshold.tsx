@@ -5,6 +5,7 @@ import DataService from '../Service/firestoreService';
 import ThresholdChart from '../SubComponents/thresholdChart';
 import { TabsProvider, Tabs, TabScreen } from 'react-native-paper-tabs';
 import ThresholdLimit from '../SubComponents/thresholdLimit';
+import { Snackbar } from 'react-native-paper';
 
 const EditThreshold = () => {
   const [latestDataEntry, setLatestDataEntry] = useState<DataEntry[]>([]);
@@ -17,6 +18,10 @@ const EditThreshold = () => {
   const [thresholdSetData, setThresholdSetData] = useState<DataEntry | undefined>();
   const scrollViewRef = useRef<ScrollView>(null);
 
+  // snackbar instructions
+  const instructions = "Set the Min and Max for your threshold";
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState(instructions);
   useEffect(() => {
     const fetchAllData = async () => {
       try {
@@ -53,6 +58,18 @@ const EditThreshold = () => {
     sevenDay(); // Call sevenDay function when the dataEntries is set
   }, [dataEntries]);
 
+
+  useEffect(() => {
+    // Show Snackbar when component mounts
+    setSnackbarVisible(true);
+    // Hide Snackbar after 2 seconds
+    const timeout = setTimeout(() => {
+      setSnackbarVisible(false);
+    }, 5000);
+
+    return () => clearTimeout(timeout); // Cleanup on component unmount
+  }, []);
+
   function sevenDay() {
     setChartData(dataEntries);
     setChartType(true)
@@ -63,6 +80,7 @@ const EditThreshold = () => {
     setChartType(false)
   }
 
+  // scroll to bottom when point selected parent function
   function scrollToBottom () {
     if (scrollViewRef.current) {
       scrollViewRef.current.scrollToEnd({ animated: true });
@@ -93,6 +111,15 @@ const EditThreshold = () => {
           <ThresholdChart data={CHARTDATA} isSevenDay={CHARTTYPE} scrollToBottom={scrollToBottom}/>
         </View>
       </ScrollView>
+
+      {/* Snackbar */}
+      <Snackbar
+        visible={snackbarVisible}
+        onDismiss={() => setSnackbarVisible(false)}
+        duration={5000} // Duration in milliseconds
+      >
+        {snackbarMessage}
+      </Snackbar>
     </View>
   );
 };

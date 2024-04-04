@@ -137,7 +137,7 @@ const ThresholdLimit: React.FC<ThresholdLimitProps> = ({ data }) => {
 
   return (
     <View style={styles.container}>
-        <Text style={{ fontSize: 15, fontWeight: 'bold',}}>Set the Min and Max for your threshold. Also get notified when humidity reaches the value!</Text>
+        {/* <Text style={{ fontSize: 15, fontWeight: 'bold',}}>Set the Min and Max for your threshold. Also get notified when humidity reaches the value!</Text> */}
         
         <View style={styles.limitText}>
             <Text style={styles.minText}>Current Set Min: {limit?.min}</Text>

@@ -79,7 +79,7 @@ const ThresholdChart = ({ data, isSevenDay, scrollToBottom }: { data: DataEntry[
           });
         }
       }
-      setTimeout(scrollToBottom, 100); // Delay scrolling to ensure state update
+      setTimeout(scrollToBottom, 100); // Delay scrolling to ensure state update call from parent component
     }
     
   
