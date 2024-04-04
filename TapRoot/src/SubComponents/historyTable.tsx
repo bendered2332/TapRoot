@@ -19,7 +19,10 @@ const HistoryTable =({ data }: { data: DataEntry[]}) => {
 
       {data.map((entry, index) => (
         entry.readings.map((reading, i) => (
-          <DataTable.Row key={entry.id + '-' + i}>
+          <DataTable.Row
+            key={entry.id + '-' + i}
+            style={{ backgroundColor: i % 2 === 0 ? '#5DB075' : '#47935D' }} // Alternate row colors based on reading index
+          >
             <DataTable.Cell>{entry.date}</DataTable.Cell>
             <DataTable.Cell>{reading.time.substring(0, 5)}</DataTable.Cell>
             <DataTable.Cell numeric>{reading.humidity.toFixed(2)}</DataTable.Cell>
