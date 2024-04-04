@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
   thresholdLimit: {
     flex: 1,
     position: 'relative',
-    alignItems: 'center',
+    // alignItems: 'center',
   },
   scrollView: {
     marginHorizontal: 0,
