@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import { DataEntry} from '../Service/dto';
 import { ActivityIndicator, MD2Colors } from 'react-native-paper';
 
-const ThresholdChart = ({ data, isSevenDay }: { data: DataEntry[], isSevenDay: boolean }) => {
+const ThresholdChart = ({ data, isSevenDay, scrollToBottom }: { data: DataEntry[], isSevenDay: boolean, scrollToBottom: () => void  }) => {
     if (!data || data.length === 0) {
       return <ActivityIndicator animating={true} color={MD2Colors.purple600} />
     }
@@ -13,6 +13,7 @@ const ThresholdChart = ({ data, isSevenDay }: { data: DataEntry[], isSevenDay: b
       time: string;
       humidity: number;
     } | null>(null);
+
 
     const dateLabels: string[] = [];
     const humidityData: number[] = [];
@@ -55,7 +56,6 @@ const ThresholdChart = ({ data, isSevenDay }: { data: DataEntry[], isSevenDay: b
 
           });
         }
-
     }
     
     const onPointPress = (point: { index: number }) => { 
@@ -79,8 +79,9 @@ const ThresholdChart = ({ data, isSevenDay }: { data: DataEntry[], isSevenDay: b
           });
         }
       }
+      setTimeout(scrollToBottom, 100); // Delay scrolling to ensure state update
     }
-      
+    
   
     const chartData = {
       labels: dateLabels,
@@ -95,25 +96,28 @@ const ThresholdChart = ({ data, isSevenDay }: { data: DataEntry[], isSevenDay: b
 
     return (
       <View style={styles.container}>
-        <Text style={styles.chartTitle}>Humidity Chart</Text>
-        <LineChart
-          data={chartData}
-          width={350}
-          height={250}
-          yAxisSuffix="%"
-          yAxisInterval={1}
-          chartConfig={{
-            backgroundColor: '#ffffff',
-            backgroundGradientFrom: '#ffffff',
-            backgroundGradientTo: '#ffffff',
-            decimalPlaces: 2,
-            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-            labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-          }}
-          bezier
-          onDataPointClick={onPointPress}
-        />
-        {selectedPoint && <Tooltip selectedPoint={selectedPoint} />}
+        
+          <Text style={styles.chartTitle}>Humidity Chart</Text>
+          <LineChart
+            data={chartData}
+            width={380}
+            height={250}
+            yAxisSuffix="%"
+            yAxisInterval={1}
+            chartConfig={{
+              backgroundColor: '#ffffff',
+              backgroundGradientFrom: '#ffffff',
+              backgroundGradientTo: '#ffffff',
+              decimalPlaces: 2,
+              color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+              labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+            }}
+            bezier
+            onDataPointClick={onPointPress}
+          />
+        <ScrollView>
+          {selectedPoint && <Tooltip selectedPoint={selectedPoint} />}
+        </ScrollView>
       </View>
     );
   };

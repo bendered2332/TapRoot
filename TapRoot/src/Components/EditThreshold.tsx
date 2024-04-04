@@ -1,5 +1,5 @@
-import { View, Text, Button, StyleSheet,} from 'react-native';
-import React, { useState, useEffect } from 'react';
+import { View, Text, Button, StyleSheet, ScrollView,} from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
 import { DataEntry, Reading } from '../Service/dto';
 import DataService from '../Service/firestoreService';
 import ThresholdChart from '../SubComponents/thresholdChart';
@@ -15,7 +15,8 @@ const EditThreshold = () => {
   const [CHARTDATA, setChartData] = useState<DataEntry[]>([]);
   const [CHARTTYPE, setChartType] = useState<boolean>(true); // isSvenDay placeholder
   const [thresholdSetData, setThresholdSetData] = useState<DataEntry | undefined>();
-  
+  const scrollViewRef = useRef<ScrollView>(null);
+
   useEffect(() => {
     const fetchAllData = async () => {
       try {
@@ -61,28 +62,38 @@ const EditThreshold = () => {
     setChartData(latestDataEntry);
     setChartType(false)
   }
+
+  function scrollToBottom () {
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollToEnd({ animated: true });
+    }
+  }
+
   return (
     <View style={styles.container}>
-      <View style={styles.thresholdLimit}>
-        {/* render component when thresholdSetData is filled */}
-        {thresholdSetData && <ThresholdLimit data={thresholdSetData} />} 
-      </View>
-      
-      <TabsProvider defaultIndex={0}>
-        <Tabs style={styles.tabs}>
-          <TabScreen label="7-Day" icon="chart-line" onPress={sevenDay}>
-            <View></View>
-          </TabScreen>
-          <TabScreen label="24-Hr" icon="chart-line" onPress={twentyFourHour}>
+      <ScrollView style={styles.scrollView} ref={scrollViewRef}>
+        
+        <View style={styles.thresholdLimit}>
+          {/* render component when thresholdSetData is filled */}
+          {thresholdSetData && <ThresholdLimit data={thresholdSetData} />} 
+        </View>
+        
+        <TabsProvider defaultIndex={0}>
+          <Tabs style={styles.tabs}>
+            <TabScreen label="7-Day" icon="chart-line" onPress={sevenDay}>
               <View></View>
-          </TabScreen>
-        </Tabs>
-      </TabsProvider>
+            </TabScreen>
+            <TabScreen label="24-Hr" icon="chart-line" onPress={twentyFourHour}>
+                <View></View>
+            </TabScreen>
+          </Tabs>
+        </TabsProvider>
 
-      <View style={styles.chartContainer}>
-        <ThresholdChart data={CHARTDATA} isSevenDay={CHARTTYPE}/>
-      </View>
-      </View>
+        <View style={styles.chartContainer}>
+          <ThresholdChart data={CHARTDATA} isSevenDay={CHARTTYPE} scrollToBottom={scrollToBottom}/>
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -107,6 +118,10 @@ const styles = StyleSheet.create({
     flex: 1,
     position: 'relative',
     alignItems: 'center',
+  },
+  scrollView: {
+    marginHorizontal: 0,
+    backgroundColor: '#5DB075',
   }
 })
 

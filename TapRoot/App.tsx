@@ -93,9 +93,9 @@ function HistoryScreen() {
 function ThresholdScreen() {
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollView}>
+      {/* <ScrollView style={styles.scrollView}> */}
         <EditThresholdComponent></EditThresholdComponent>
-      </ScrollView>
+      {/* </ScrollView> */}
     </SafeAreaView>
   );
 }
