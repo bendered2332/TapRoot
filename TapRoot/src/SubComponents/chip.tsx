@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   chip: {
-    width: 125,
+    width: 'auto',
     marginTop: 10,
     marginVertical: 10,
     marginHorizontal: 5,

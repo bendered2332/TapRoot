@@ -7,7 +7,7 @@ import { DataEntry  } from '../Service/dto';
 
 const HistoryTable =({ data }: { data: DataEntry[]}) => {
     if (!data || data.length === 0) {
-      return <Text style={{ fontSize: 20, fontWeight: 'bold',}}>Please select a Date for the table to appear!</Text>    }
+      return <Text style={{ fontSize: 18, paddingLeft: 8, fontWeight: 'bold',}}>Please select a Date for the table to appear!</Text>    }
     // just return the data
   return (
     <DataTable>
