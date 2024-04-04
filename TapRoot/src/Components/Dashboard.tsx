@@ -145,7 +145,6 @@ const Dashboard = () => {
   return (
     <View style={styles.container}>
       {/* Dashboard content in here */}
-      <Text style={styles.welcomeText}>Hi Bill!</Text>
        {/* First Card */}
        <View style={styles.card}>
           <Text style={styles.title}>Current Soil Humidity Level</Text>
@@ -199,12 +198,6 @@ const styles = StyleSheet.create({
     padding: 16,
     position: 'relative',
     backgroundColor: '#5DB075',
-  },
-  welcomeText:{
-    fontWeight: 'bold',
-    paddingTop: 0,
-    textAlign:'center',
-    fontSize: 20,
   },
   card: {
     marginTop: 15,
